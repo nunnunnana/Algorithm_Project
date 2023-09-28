@@ -15,6 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	AStackQueue();
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		TArray<int32> Stack;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		int top;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		bool check;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -22,6 +30,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+		void IsFull();
+
+	UFUNCTION(BlueprintCallable)
+		void IsEmpty();
 
 	UFUNCTION(BlueprintCallable)
 		void push();

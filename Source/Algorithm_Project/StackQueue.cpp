@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "StackQueue.h"
 
 // Sets default values
@@ -15,7 +14,7 @@ AStackQueue::AStackQueue()
 void AStackQueue::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	top = -1;
 }
 
 // Called every frame
@@ -25,13 +24,37 @@ void AStackQueue::Tick(float DeltaTime)
 
 }
 
+void AStackQueue::IsEmpty()
+{
+	if (top < 0)
+		check = true;
+	else
+		check = false;
+}
+
+void AStackQueue::IsFull()
+{
+	if (top >= 9)
+		check = true;
+	else
+		check = false;
+}
+
 void AStackQueue::push() 
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("push"));
+	if (check == true)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
+	else
+		Stack.Add(++top);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 }
 
 void AStackQueue::pop()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("pop"));
+	if (check == true)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
+	else
+		Stack.RemoveAt(top--);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 }
 
