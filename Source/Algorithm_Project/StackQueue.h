@@ -18,10 +18,11 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		TArray<int32> Stack;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UPROPERTY()
 		int top;
+
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		bool check;
+		int Size;
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,10 +34,10 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-		void IsFull();
+		bool IsFull();
 
 	UFUNCTION(BlueprintCallable)
-		void IsEmpty();
+		bool IsEmpty();
 
 	UFUNCTION(BlueprintCallable)
 		void push();

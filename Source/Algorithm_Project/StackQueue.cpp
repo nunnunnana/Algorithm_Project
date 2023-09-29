@@ -24,25 +24,25 @@ void AStackQueue::Tick(float DeltaTime)
 
 }
 
-void AStackQueue::IsEmpty()
+bool AStackQueue::IsEmpty()
 {
 	if (top < 0)
-		check = true;
+		return true;
 	else
-		check = false;
+		return false;
 }
 
-void AStackQueue::IsFull()
+bool AStackQueue::IsFull()
 {
-	if (top >= 9)
-		check = true;
+	if (top >= Size)
+		return true;
 	else
-		check = false;
+		return false;
 }
 
 void AStackQueue::push() 
 {
-	if (check == true)
+	if (IsFull())
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
 	else
 		Stack.Add(++top);
@@ -51,7 +51,7 @@ void AStackQueue::push()
 
 void AStackQueue::pop()
 {
-	if (check == true)
+	if (IsEmpty())
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
 	else
 		Stack.RemoveAt(top--);
