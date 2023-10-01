@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "Engine/StaticMeshActor.h"
+#include "UObject/ConstructorHelpers.h"
 #include "StackQueue.generated.h"
 
 UCLASS()
@@ -16,13 +20,16 @@ public:
 	AStackQueue();
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		TArray<int32> Stack;
+		TArray<int32> arrStack;
 
 	UPROPERTY()
 		int top;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		int Size;
+		int size;
+
+	//UPROPERTY(EditDefaultsOnly)
+	//	TSubclassOf<class UStaticMeshComponent> staticMesh;
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,6 +39,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 protected:
 	UFUNCTION(BlueprintCallable)
 		bool IsFull();
@@ -40,9 +48,9 @@ protected:
 		bool IsEmpty();
 
 	UFUNCTION(BlueprintCallable)
-		void push();
+		void Push();
 
 	UFUNCTION(BlueprintCallable)
-		void pop();
+		void Pop();
 
 };
