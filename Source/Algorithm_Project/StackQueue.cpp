@@ -78,14 +78,18 @@ void AStackQueue::Push()
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = NULL;
 		SpawnParams.Instigator = NULL;
-		AStaticMeshActor* target = (AStaticMeshActor*) GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), currentLocation, currentRotation, SpawnParams);
+		AStaticMeshActor* target = (AStaticMeshActor*)GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), currentLocation, currentRotation, SpawnParams);
 		target->SetMobility(EComponentMobility::Movable);
-		static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
-		if (cubeMesh.Succeeded())
-		{
-			target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Succeeded")));
-		}
+		//static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+		static ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube"));
+		UStaticMesh* Asset = cubeMesh.Object;
+		target->GetStaticMeshComponent()->SetStaticMesh(Asset);
+
+		//if (cubeMesh.Succeeded())
+		//{
+		//	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
+		//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Succeeded")));
+		//}
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 	
 }
