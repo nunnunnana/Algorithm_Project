@@ -46,8 +46,8 @@ void AStackQueue::Push()
 	if (IsFull())
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
 	else {
-		arrStack.Add(++top);
 		SpawnActor();
+		top++;
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 	
@@ -57,8 +57,10 @@ void AStackQueue::Pop()
 {
 	if (IsEmpty())
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
-	else
-		arrStack.RemoveAt(top--);
+	else {
+		RemoveActor();
+		top--;
+	}
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 }
 
@@ -102,6 +104,15 @@ void AStackQueue::SpawnActor()
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Failed")));
 		currentTarget = target;
 	}
-
+	arrTarget.Add(currentTarget);
 }
 
+
+void AStackQueue::RemoveActor()
+{
+	if (arrTarget[top] != nullptr) {
+		arrTarget[top]->Destroy();
+		arrTarget.RemoveAt(top);
+	}
+
+}

@@ -19,9 +19,6 @@ public:
 	// Sets default values for this actor's properties
 	AStackQueue();
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		TArray<int32> arrStack;
-
 	UPROPERTY()
 		int top;
 
@@ -32,6 +29,9 @@ public:
 	//	TSubclassOf<class UStaticMeshComponent> staticMesh;
 	UPROPERTY()
 		AStaticMeshActor* currentTarget;
+
+	UPROPERTY()
+		TArray<AStaticMeshActor*> arrTarget;
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,5 +57,8 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void SpawnActor();
+
+	UFUNCTION(BlueprintCallable)
+		void RemoveActor();
 
 };
