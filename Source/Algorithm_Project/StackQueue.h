@@ -30,6 +30,8 @@ public:
 
 	//UPROPERTY(EditDefaultsOnly)
 	//	TSubclassOf<class UStaticMeshComponent> staticMesh;
+	UPROPERTY()
+		AStaticMeshActor* currentTarget;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,5 +54,8 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void Pop();
+
+	UFUNCTION(BlueprintCallable)
+		void SpawnActor();
 
 };

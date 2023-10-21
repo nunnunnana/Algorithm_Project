@@ -45,33 +45,26 @@ void AStackQueue::Push()
 {
 	if (IsFull())
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
-	else
+	else {
 		arrStack.Add(++top);
-		//if (staticMesh)
-		//{
-		//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("staticMesh = not NULL")));
-		//	FVector currentLocation = GetActorLocation();
-		//	FRotator currentRotation = GetActorRotation();
-		//	currentLocation.Z += 100;
-		//	UWorld* World = GetWorld();
-		//	if (World)
-		//	{
-		//		FActorSpawnParameters SpawnParams;
-		//		SpawnParams.Owner = NULL;
-		//		SpawnParams.Instigator = NULL;
-		//		UStaticMeshComponent* currentTarget = World->SpawnActor<UStaticMeshComponent>(staticMesh, currentLocation, currentRotation, SpawnParams);
-		//		currentTarget->SetMobility(EComponentMobility::Movable);
-		//		static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("/Game/StarterContent/Shapes/Shape_Cube"));
-		//		if (CubeMeshAsset.Succeeded())
-		//		{
-		//			currentTarget->SetStaticMesh(CubeMeshAsset.Object);
-		//			currentTarget->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-		//			currentTarget->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
-		//		}
-		//	}
-		//}
-		//else
+		SpawnActor();
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
+	
+}
 
+void AStackQueue::Pop()
+{
+	if (IsEmpty())
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
+	else
+		arrStack.RemoveAt(top--);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
+}
+
+void AStackQueue::SpawnActor()
+{
+	if (currentTarget == nullptr) {
 		FVector currentLocation = GetActorLocation();
 		FRotator currentRotation = GetActorRotation();
 		currentLocation.Z += 50;
@@ -88,16 +81,27 @@ void AStackQueue::Push()
 		}
 		else
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Failed")));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
-	
-}
+		currentTarget = target;
+	}
+	else if (currentTarget != nullptr) {
+		FVector targetLocation = currentTarget->GetActorLocation();
+		FRotator targetRotation = currentTarget->GetActorRotation();
+		targetLocation.Z += 100;
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = NULL;
+		SpawnParams.Instigator = NULL;
+		AStaticMeshActor* target = (AStaticMeshActor*)GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), targetLocation, targetRotation, SpawnParams);
+		target->SetMobility(EComponentMobility::Movable);
+		static ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+		if (cubeMesh.Succeeded())
+		{
+			target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Succeeded")));
+		}
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("CubeMeshAsset Failed")));
+		currentTarget = target;
+	}
 
-void AStackQueue::Pop()
-{
-	if (IsEmpty())
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
-	else
-		arrStack.RemoveAt(top--);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("top = %d"), top));
 }
 
