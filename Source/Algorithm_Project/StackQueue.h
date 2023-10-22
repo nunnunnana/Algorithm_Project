@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/StaticMesh.h"
 #include "Engine/StaticMeshActor.h"
 #include "UObject/ConstructorHelpers.h"
 #include "StackQueue.generated.h"
@@ -25,13 +23,14 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		int size;
 
-	//UPROPERTY(EditDefaultsOnly)
-	//	TSubclassOf<class UStaticMeshComponent> staticMesh;
 	UPROPERTY()
 		AStaticMeshActor* currentTarget;
 
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
+
+	TSubclassOf<UUserWidget> W_MyStackQueue;
+	W_MyStackQueue* MainHUDWidget;
 
 protected:
 	// Called when the game starts or when spawned
