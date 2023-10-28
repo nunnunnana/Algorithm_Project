@@ -29,8 +29,6 @@ public:
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
 
-	TSubclassOf<UUserWidget> W_MyStackQueue;
-	W_MyStackQueue* MainHUDWidget;
 
 protected:
 	// Called when the game starts or when spawned
