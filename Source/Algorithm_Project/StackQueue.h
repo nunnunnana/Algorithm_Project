@@ -53,7 +53,7 @@ protected:
 		void Pop();
 
 	UFUNCTION(BlueprintCallable)
-		void SpawnActor();
+		void SpawnActor(AActor* targetActor, int height);
 
 	UFUNCTION(BlueprintCallable)
 		void RemoveActor();
