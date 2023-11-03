@@ -74,11 +74,11 @@ void AStackQueue::SpawnActor(AActor* targetActor, int height)
 	SpawnParams.Instigator = NULL;
 	AStaticMeshActor* target = (AStaticMeshActor*)GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), currentLocation, currentRotation, SpawnParams);
 	target->SetMobility(EComponentMobility::Movable);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
-	if (cubeMesh.Succeeded())
-	{
-		target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
-	}
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+	//if (cubeMesh.Succeeded())
+	//{
+	//	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
+	//}
 	currentTarget = target;
 	arrTarget.Add(currentTarget);
 }
