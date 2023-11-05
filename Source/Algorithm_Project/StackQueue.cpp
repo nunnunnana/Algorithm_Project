@@ -8,6 +8,17 @@ AStackQueue::AStackQueue()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	struct FConstructorStatics
+	{
+		ConstructorHelpers::FObjectFinder<UStaticMesh> object0;
+		FConstructorStatics()
+			: object0(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"))
+		{
+		}
+	};
+	static FConstructorStatics ConstructorStatics;
+
+	cubeMesh = ConstructorStatics.object0.Object;
 
 }
 
@@ -43,11 +54,17 @@ bool AStackQueue::IsFull()
 
 void AStackQueue::Push() 
 {
-	if (IsFull())
+	if (IsFull()) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
+		if (OnFulled.IsBound() == true)
+			OnFulled.Broadcast();
+		// Pawn C++ 기능 추가하면 활성화
+		//if (Fuc_DeleSingle.IsBound() == true)	
+		//	Fuc_DeleSingle.Execute();
+	}
 	else {
 		if (currentTarget == nullptr)
-			SpawnActor(this, 50);
+			SpawnActor(this, 100);
 		else
 			SpawnActor(currentTarget, 100);
 		top++;
@@ -56,38 +73,46 @@ void AStackQueue::Push()
 
 void AStackQueue::Pop()
 {
-	if (IsEmpty())
+	if (IsEmpty()) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
+		if (OnEmptied.IsBound() == true)
+			OnEmptied.Broadcast();
+	}
+		
 	else {
 		RemoveActor();
 		top--;
 	}
 }
 
+/* 액터 생성 */
 void AStackQueue::SpawnActor(AActor* targetActor, int height)
 {
 	FVector currentLocation = targetActor->GetActorLocation();
 	FRotator currentRotation = targetActor->GetActorRotation();
 	currentLocation.Z += height;
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = NULL;
-	SpawnParams.Instigator = NULL;
 	AStaticMeshActor* target = (AStaticMeshActor*)GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), currentLocation, currentRotation, SpawnParams);
 	target->SetMobility(EComponentMobility::Movable);
-	//static ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
-	//if (cubeMesh.Succeeded())
-	//{
-	//	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh.Object);
-	//}
+	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh);
 	currentTarget = target;
 	arrTarget.Add(currentTarget);
 }
 
-
+/* 액터 제거 */
 void AStackQueue::RemoveActor()
 {
+	// 배열 마지막 인덱스의 액터가 NULL 인지 확인 후 제거
 	if (arrTarget[top] != nullptr) {
 		arrTarget[top]->Destroy();
 		arrTarget.RemoveAt(top);
+
+		// 마지막 인덱스가 0이면 변수 초기화
+		if (top == 0) {
+			currentTarget = nullptr;
+		}
+		else {
+			currentTarget = arrTarget[top - 1];
+		}
 	}
 }
