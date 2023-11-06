@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Engine/World.h"
 #include "BasicPawn.generated.h"
 
 UCLASS()
@@ -15,9 +16,22 @@ public:
 	// Sets default values for this pawn's properties
 	ABasicPawn();
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		float moveSpeed = 400;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		float mouseSpeed = 100;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void MoveForward(float AxisValue);	// MoveFoward 메소드
+	void MoveRight(float AxisValue);	// MoveRight 메소드
+	void MoveUp(float AxisValue);		// MoveUp 메소드
+	void Turn(float AxisValue);			// MoveUp 메소드
+	void LookUp(float AxisValue);		// MoveUp 메소드
 
 public:	
 	// Called every frame

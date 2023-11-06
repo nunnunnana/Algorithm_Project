@@ -15,7 +15,6 @@ ABasicPawn::ABasicPawn()
 void ABasicPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -29,6 +28,36 @@ void ABasicPawn::Tick(float DeltaTime)
 void ABasicPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ABasicPawn::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ABasicPawn::MoveRight);
+	PlayerInputComponent->BindAxis("MoveUp", this, &ABasicPawn::MoveUp);
+	PlayerInputComponent->BindAxis("Turn", this, &ABasicPawn::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &ABasicPawn::LookUp);
 
+}
+
+void ABasicPawn::MoveForward(float AxisValue)
+{
+	AddActorLocalOffset(FVector(AxisValue * moveSpeed * GetWorld()->GetDeltaSeconds(), 0, 0));
+}
+
+void ABasicPawn::MoveRight(float AxisValue)
+{
+	AddActorLocalOffset(FVector(0, AxisValue * moveSpeed * GetWorld()->GetDeltaSeconds(), 0));
+}
+
+void ABasicPawn::MoveUp(float AxisValue)
+{
+	AddActorLocalOffset(FVector(0, 0, AxisValue * moveSpeed * GetWorld()->GetDeltaSeconds()));
+}
+
+void ABasicPawn::Turn(float AxisValue)
+{
+	AddControllerYawInput(AxisValue * mouseSpeed * GetWorld()->GetDeltaSeconds());
+}
+
+void ABasicPawn::LookUp(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * mouseSpeed * GetWorld()->GetDeltaSeconds());
 }
 
