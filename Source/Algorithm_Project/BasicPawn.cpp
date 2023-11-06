@@ -33,6 +33,8 @@ void ABasicPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis("MoveUp", this, &ABasicPawn::MoveUp);
 	PlayerInputComponent->BindAxis("Turn", this, &ABasicPawn::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &ABasicPawn::LookUp);
+	PlayerInputComponent->BindAction("Z", IE_Pressed, this, &ABasicPawn::Z);
+	PlayerInputComponent->BindAction("X", IE_Pressed, this, &ABasicPawn::X);
 
 }
 
@@ -59,5 +61,15 @@ void ABasicPawn::Turn(float AxisValue)
 void ABasicPawn::LookUp(float AxisValue)
 {
 	AddControllerPitchInput(AxisValue * mouseSpeed * GetWorld()->GetDeltaSeconds());
+}
+
+void ABasicPawn::Z()
+{
+	stackqueueActor->Push();
+}
+
+void ABasicPawn::X()
+{
+	stackqueueActor->Pop();
 }
 

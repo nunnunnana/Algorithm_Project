@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
+#include "StackQueue.h"
 #include "BasicPawn.generated.h"
 
 UCLASS()
@@ -22,16 +23,21 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		float mouseSpeed = 100;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		AStackQueue* stackqueueActor;
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void MoveForward(float AxisValue);	// MoveFoward 메소드
-	void MoveRight(float AxisValue);	// MoveRight 메소드
-	void MoveUp(float AxisValue);		// MoveUp 메소드
-	void Turn(float AxisValue);			// MoveUp 메소드
-	void LookUp(float AxisValue);		// MoveUp 메소드
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+	void MoveUp(float AxisValue);
+	void Turn(float AxisValue);		
+	void LookUp(float AxisValue);
+	void Z();
+	void X();
 
 public:	
 	// Called every frame

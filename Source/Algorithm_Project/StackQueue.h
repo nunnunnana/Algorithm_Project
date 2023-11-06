@@ -56,6 +56,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+		void Push();
+
+	UFUNCTION(BlueprintCallable)
+		void Pop();
+
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -63,12 +69,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		bool IsEmpty();
-
-	UFUNCTION(BlueprintCallable)
-		void Push();
-
-	UFUNCTION(BlueprintCallable)
-		void Pop();
 
 	UFUNCTION(BlueprintCallable)
 		void SpawnActor(AActor* targetActor, int height);
