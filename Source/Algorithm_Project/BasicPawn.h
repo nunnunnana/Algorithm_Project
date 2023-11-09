@@ -23,10 +23,6 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		float mouseSpeed = 100;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		AStackQueue* stackqueueActor;
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,8 +32,6 @@ protected:
 	void MoveUp(float AxisValue);
 	void Turn(float AxisValue);		
 	void LookUp(float AxisValue);
-	void Z();
-	void X();
 
 public:	
 	// Called every frame
