@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
+#include "Camera/CameraComponent.h"
 #include "StackQueue.h"
 #include "BasicPawn.generated.h"
 
@@ -22,6 +23,9 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		float mouseSpeed = 100;
+
+	UPROPERTY(EditAnywhere)
+		UCameraComponent* Camera;
 
 protected:
 	// Called when the game starts or when spawned
