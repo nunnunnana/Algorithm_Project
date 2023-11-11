@@ -3,3 +3,8 @@
 
 #include "W_StackQueue.h"
 
+void UW_StackQueue::SetAlertText(FText text)
+{
+	alertText->SetText(text);
+	//MainHUDWidget->GetItemText()->SetText(FText::FromString(alertText));
+}

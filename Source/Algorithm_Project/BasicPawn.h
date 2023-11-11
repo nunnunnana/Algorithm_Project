@@ -6,7 +6,6 @@
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
-#include "StackQueue.h"
 #include "BasicPawn.generated.h"
 
 UCLASS()

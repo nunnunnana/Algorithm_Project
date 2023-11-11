@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "BasicPawn.h"
+#include "StackQueue.h"
+#include "W_StackQueue.h"
+#include "Components/TextBlock.h"
 #include "StackQueuePawn.generated.h"
 
 /**
@@ -21,12 +24,17 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		AStackQueue* stackqueueActor;
 
+	TSubclassOf<UUserWidget> MainHUDWidgetClass;
+		UW_StackQueue* MainHUDWidget;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void Z();
 	void X();
+
 
 public:
 	// Called every frame

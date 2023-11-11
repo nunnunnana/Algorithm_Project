@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "W_StackQueue.generated.h"
 
 /**
@@ -14,4 +15,13 @@ class ALGORITHM_PROJECT_API UW_StackQueue : public UUserWidget
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(meta = (BindWidget))
+		UTextBlock* alertText;
+
+public:
+	FORCEINLINE UTextBlock* GetItemText() { return alertText; };
+
+	UFUNCTION(BlueprintCallable)
+		void SetAlertText(FText text);
 };
