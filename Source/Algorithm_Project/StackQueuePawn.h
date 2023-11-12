@@ -35,6 +35,11 @@ protected:
 	void Z();
 	void X();
 
+	UFUNCTION()
+		void CallDeleFunc_OnFulled();
+	UFUNCTION()
+		void CallDeleFunc_OnEmptied();
+
 
 public:
 	// Called every frame
