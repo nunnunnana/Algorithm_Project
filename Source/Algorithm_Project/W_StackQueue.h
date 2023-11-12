@@ -5,23 +5,39 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 #include "W_StackQueue.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class ALGORITHM_PROJECT_API UW_StackQueue : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	virtual void NativeConstruct();
+
 private:
+	void AdvanceTimer();
+
+	bool isQueue = false;
+
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* alertText;
 
-public:
-	FORCEINLINE UTextBlock* GetItemText() { return alertText; };
+	UPROPERTY(meta = (BindWidget))
+		UButton* convertButton;
+	
+	UPROPERTY(meta = (BindWidget))
+		UTextBlock* stateText;
 
-	UFUNCTION(BlueprintCallable)
+	FTimerHandle Timer;
+
+public:
+	
+	UFUNCTION()
 		void SetAlertText(FText text);
+
+	UFUNCTION()
+		void SetButtonText();
 };
