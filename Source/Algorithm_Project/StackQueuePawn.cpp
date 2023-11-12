@@ -7,7 +7,7 @@
 AStackQueuePawn::AStackQueuePawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// 블루프린트 클래스를 받아온다
 	static ConstructorHelpers::FClassFinder<UUserWidget> MainHUDWidgetAsset(TEXT("WidgetBlueprint'/Game/StackQueue/BP_W_StackQueue.BP_W_StackQueue_C'"));
