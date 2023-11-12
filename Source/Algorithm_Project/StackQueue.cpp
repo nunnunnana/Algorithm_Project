@@ -57,10 +57,7 @@ void AStackQueue::Push()
 	if (IsFull()) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
 		if (OnFulled.IsBound() == true)
-			OnFulled.Broadcast();
-		// Pawn C++ 기능 추가하면 활성화
-		//if (Fuc_DeleSingle.IsBound() == true)	
-		//	Fuc_DeleSingle.Execute();
+			OnFulled.Execute();
 	}
 	else {
 		if (currentTarget == nullptr)
@@ -76,7 +73,7 @@ void AStackQueue::Pop()
 	if (IsEmpty()) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
 		if (OnEmptied.IsBound() == true)
-			OnEmptied.Broadcast();
+			OnEmptied.Execute();
 	}
 		
 	else {
