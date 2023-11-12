@@ -30,9 +30,10 @@ void AStackQueuePawn::BeginPlay()
 		if (IsValid(MainHUDWidget))
 		{
 			MainHUDWidget->AddToViewport();
-			MainHUDWidget->SetAlertText(FText::FromString("babo"));
 		}
 	}
+	stackqueueActor->OnFulled.BindUFunction(this, FName("CallDeleFunc_OnFulled"));
+	stackqueueActor->OnEmptied.BindUFunction(this, FName("CallDeleFunc_OnEmptied"));
 	
 }
 
@@ -60,4 +61,14 @@ void AStackQueuePawn::Z()
 void AStackQueuePawn::X()
 {
 	stackqueueActor->Pop();
+}
+
+void AStackQueuePawn::CallDeleFunc_OnFulled()
+{
+	MainHUDWidget->SetAlertText(FText::FromString("Full"));
+}
+
+void AStackQueuePawn::CallDeleFunc_OnEmptied()
+{
+	MainHUDWidget->SetAlertText(FText::FromString("Empty"));
 }
