@@ -28,11 +28,14 @@ public:
 	UPROPERTY()
 		int top;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UPROPERTY(EditAnyWhere)
 		int size;
 
 	UPROPERTY()
 		AStaticMeshActor* currentTarget;
+
+	UPROPERTY()
+		UStaticMeshComponent* staitcMesh;
 
 	UPROPERTY()
 		UStaticMesh* cubeMesh;
@@ -49,24 +52,24 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void Push();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void Pop();
 
 
 protected:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		bool IsFull();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		bool IsEmpty();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void SpawnActor(AActor* targetActor, int height);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void RemoveActor();
 
 };

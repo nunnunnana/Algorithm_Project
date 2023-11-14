@@ -21,11 +21,11 @@ public:
 	// Sets default values for this pawn's properties
 	AStackQueuePawn();
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UPROPERTY(EditAnyWhere)
 		AStackQueue* stackqueueActor;
 
-	TSubclassOf<UUserWidget> MainHUDWidgetClass;
-		UW_StackQueue* MainHUDWidget;
+	TSubclassOf<UUserWidget> stackqueueWidgetClass;
+		UW_StackQueue* stackqueueWidget;
 
 
 protected:
