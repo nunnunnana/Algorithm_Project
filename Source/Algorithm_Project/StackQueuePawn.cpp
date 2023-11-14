@@ -8,12 +8,11 @@ AStackQueuePawn::AStackQueuePawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 	// 블루프린트 클래스를 받아온다
-	static ConstructorHelpers::FClassFinder<UUserWidget> MainHUDWidgetAsset(TEXT("WidgetBlueprint'/Game/StackQueue/BP_W_StackQueue.BP_W_StackQueue_C'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> stackqueueWidgetAsset(TEXT("WidgetBlueprint'/Game/StackQueue/BP_W_StackQueue.BP_W_StackQueue_C'"));
 	// TSubclassOf 템플릿 클래스 객체에 블루프린트 클래스를 넣어준다
-	if (MainHUDWidgetAsset.Succeeded()) {
-		MainHUDWidgetClass = MainHUDWidgetAsset.Class;
+	if (stackqueueWidgetAsset.Succeeded()) {
+		stackqueueWidgetClass = stackqueueWidgetAsset.Class;
 	}
 
 
@@ -23,13 +22,13 @@ AStackQueuePawn::AStackQueuePawn()
 void AStackQueuePawn::BeginPlay()
 {
 	Super::BeginPlay();
-	if (IsValid(MainHUDWidgetClass))
+	if (IsValid(stackqueueWidgetClass))
 	{
-		MainHUDWidget = Cast<UW_StackQueue>(CreateWidget(GetWorld(), MainHUDWidgetClass));
+		stackqueueWidget = Cast<UW_StackQueue>(CreateWidget(GetWorld(), stackqueueWidgetClass));
 
-		if (IsValid(MainHUDWidget))
+		if (IsValid(stackqueueWidget))
 		{
-			MainHUDWidget->AddToViewport();
+			stackqueueWidget->AddToViewport();
 		}
 	}
 	stackqueueActor->OnFulled.BindUFunction(this, FName("CallDeleFunc_OnFulled"));
@@ -65,10 +64,10 @@ void AStackQueuePawn::X()
 
 void AStackQueuePawn::CallDeleFunc_OnFulled()
 {
-	MainHUDWidget->SetAlertText(FText::FromString("Full"));
+	stackqueueWidget->SetAlertText(FText::FromString("Full"));
 }
 
 void AStackQueuePawn::CallDeleFunc_OnEmptied()
 {
-	MainHUDWidget->SetAlertText(FText::FromString("Empty"));
+	stackqueueWidget->SetAlertText(FText::FromString("Empty"));
 }
