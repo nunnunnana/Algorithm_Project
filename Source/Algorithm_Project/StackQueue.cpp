@@ -7,17 +7,22 @@ AStackQueue::AStackQueue()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	staitcMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	staitcMesh->SetupAttachment(RootComponent);
+
 	struct FConstructorStatics
 	{
-		ConstructorHelpers::FObjectFinder<UStaticMesh> object0;
+		ConstructorHelpers::FObjectFinder<UStaticMesh> findMesh;
 		FConstructorStatics()
-			: object0(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"))
+			: findMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"))
 		{
 		}
 	};
 	static FConstructorStatics ConstructorStatics;
+	cubeMesh = ConstructorStatics.findMesh.Object;
 
-	cubeMesh = ConstructorStatics.object0.Object;
+	//staitcMesh->SetStaticMesh(cubeMesh);
 
 }
 
@@ -45,7 +50,7 @@ bool AStackQueue::IsEmpty()
 
 bool AStackQueue::IsFull()
 {
-	if (top >= size)
+	if (top >= size - 1)
 		return true;
 	else
 		return false;
@@ -60,7 +65,7 @@ void AStackQueue::Push()
 	}
 	else {
 		if (currentTarget == nullptr)
-			SpawnActor(this, 100);
+			SpawnActor(this, 0);
 		else
 			SpawnActor(currentTarget, 100);
 		top++;
