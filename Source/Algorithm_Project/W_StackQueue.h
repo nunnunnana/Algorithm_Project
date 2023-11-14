@@ -17,10 +17,10 @@ class ALGORITHM_PROJECT_API UW_StackQueue : public UUserWidget
 public:
 	virtual void NativeConstruct();
 
+	bool isQueue = false;
+
 private:
 	void AdvanceTimer();
-
-	bool isQueue = false;
 
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* alertText;
