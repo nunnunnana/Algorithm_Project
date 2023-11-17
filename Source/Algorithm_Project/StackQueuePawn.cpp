@@ -54,12 +54,20 @@ void AStackQueuePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AStackQueuePawn::Z()
 {
-	stackqueueActor->Push();
+	if (stackqueueWidget->isQueue) {
+		stackqueueActor->QueuePush();
+	}
+	else
+		stackqueueActor->Push();
 }
 
 void AStackQueuePawn::X()
 {
-	stackqueueActor->Pop();
+	if (stackqueueWidget->isQueue) {
+		stackqueueActor->QueuePop();
+	}
+	else 
+		stackqueueActor->Pop();
 }
 
 void AStackQueuePawn::CallDeleFunc_OnFulled()
