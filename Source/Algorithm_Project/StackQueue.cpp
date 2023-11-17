@@ -23,14 +23,12 @@ AStackQueue::AStackQueue()
 	cubeMesh = ConstructorStatics.findMesh.Object;
 
 	//staitcMesh->SetStaticMesh(cubeMesh);
-
 }
 
 // Called when the game starts or when spawned
 void AStackQueue::BeginPlay()
 {
 	Super::BeginPlay();
-	top = -1;
 }
 
 // Called every frame
@@ -40,15 +38,8 @@ void AStackQueue::Tick(float DeltaTime)
 
 }
 
-bool AStackQueue::IsEmpty()
-{
-	if (top < 0)
-		return true;
-	else
-		return false;
-}
-
-bool AStackQueue::IsFull()
+// Stack
+bool AStackQueue::IsStackFull()
 {
 	if (top >= size - 1)
 		return true;
@@ -56,10 +47,18 @@ bool AStackQueue::IsFull()
 		return false;
 }
 
-void AStackQueue::Push() 
+bool AStackQueue::IsStackEmpty()
 {
-	if (IsFull()) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsFull"));
+	if (top < 0)
+		return true;
+	else
+		return false;
+}
+
+void AStackQueue::Push()
+{
+	if (IsStackFull()) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsStackFull"));
 		if (OnFulled.IsBound() == true)
 			OnFulled.Execute();
 	}
@@ -74,16 +73,61 @@ void AStackQueue::Push()
 
 void AStackQueue::Pop()
 {
-	if (IsEmpty()) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsEmpty"));
+	if (IsStackEmpty()) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsStackEmpty"));
 		if (OnEmptied.IsBound() == true)
 			OnEmptied.Execute();
 	}
-		
+
 	else {
 		RemoveActor();
 		top--;
 	}
+}
+
+//  Queue
+bool AStackQueue::IsQueueFull()
+{
+	if ((rear + 1) % size == front) {
+		return true;
+	}
+	return false;
+}
+
+bool AStackQueue::IsQueueEmpty()
+{
+	if (rear == front) {
+		return true;
+	}
+	return false;
+}
+
+void AStackQueue::QueuePush()
+{
+	if (IsQueueFull()){
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsQueueFull"));
+		if (OnFulled.IsBound() == true)
+			OnFulled.Execute();
+	}
+	else {
+		rear = (rear + 1) % size;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"),rear));
+	}
+
+}
+
+void AStackQueue::QueuePop()
+{
+	if (IsQueueEmpty()){
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsQueueEmpty"));
+		if (OnEmptied.IsBound() == true)
+			OnEmptied.Execute();
+	}
+	else {
+		front = (front + 1) % size;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), front));
+	}
+
 }
 
 /* 액터 생성 */

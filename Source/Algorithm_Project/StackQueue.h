@@ -25,11 +25,14 @@ public:
 	// Sets default values for this actor's properties
 	AStackQueue();
 
-	UPROPERTY()
-		int top;
-
 	UPROPERTY(EditAnyWhere)
 		int size;
+
+		int top = -1;
+
+		int front = 0;
+
+		int rear = 0;
 
 	UPROPERTY()
 		AStaticMeshActor* currentTarget;
@@ -42,6 +45,8 @@ public:
 
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
+
+		
 
 
 protected:
@@ -58,13 +63,25 @@ public:
 	UFUNCTION()
 		void Pop();
 
+	UFUNCTION()
+		void QueuePush();
+
+	UFUNCTION()
+		void QueuePop();
+
 
 protected:
 	UFUNCTION()
-		bool IsFull();
+		bool IsStackFull();
 
 	UFUNCTION()
-		bool IsEmpty();
+		bool IsStackEmpty();
+
+	UFUNCTION()
+		bool IsQueueFull();
+
+	UFUNCTION()
+		bool IsQueueEmpty();
 
 	UFUNCTION()
 		void SpawnActor(AActor* targetActor, int height);
