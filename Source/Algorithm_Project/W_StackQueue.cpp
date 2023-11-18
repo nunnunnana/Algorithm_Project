@@ -9,6 +9,7 @@ void UW_StackQueue::NativeConstruct()
 	// 버튼 클릭시 호출될 델리게이트에 함수를 등록한다
 	convertButton->OnClicked.AddDynamic(this, &UW_StackQueue::SetButtonText);
 	alertText->SetVisibility(ESlateVisibility::Hidden);
+	queuePanel->SetVisibility(ESlateVisibility::Hidden);
 }
 void UW_StackQueue::SetAlertText(FText text)
 {
@@ -22,6 +23,11 @@ void UW_StackQueue::SetAlertText(FText text)
 
 }
 
+void UW_StackQueue::SetIndexText(FText text)
+{
+	indexText->SetText(text);
+}
+
 void UW_StackQueue::AdvanceTimer()
 {
 	alertText->SetVisibility(ESlateVisibility::Hidden);
@@ -31,9 +37,13 @@ void UW_StackQueue::SetButtonText()
 {
 	if (isQueue == true) {
 		stateText->SetText(FText::FromString("Stack"));
+		stackPanel->SetVisibility(ESlateVisibility::Visible);
+		queuePanel->SetVisibility(ESlateVisibility::Hidden);
 	}
 	else {
 		stateText->SetText(FText::FromString("Queue"));
+		stackPanel->SetVisibility(ESlateVisibility::Hidden);
+		queuePanel->SetVisibility(ESlateVisibility::Visible);
 	}
 	isQueue = !isQueue;
 }

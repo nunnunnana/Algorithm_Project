@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
+#include "Components/CanvasPanel.h"
 #include "W_StackQueue.generated.h"
 
 
@@ -31,6 +32,15 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* stateText;
 
+	UPROPERTY(meta = (BindWidget))
+		UTextBlock* indexText;
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* stackPanel;
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* queuePanel;
+
 	FTimerHandle Timer;
 
 public:
@@ -39,5 +49,9 @@ public:
 		void SetAlertText(FText text);
 
 	UFUNCTION()
+		void SetIndexText(FText text);
+
+	UFUNCTION()
 		void SetButtonText();
+
 };
