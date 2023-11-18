@@ -57,8 +57,14 @@ void AStackQueuePawn::Z()
 	if (stackqueueWidget->isQueue) {
 		stackqueueActor->QueuePush();
 	}
-	else
+	else {
 		stackqueueActor->Push();
+		int index = stackqueueActor->top + 1;
+		FString indexString = FString::FromInt(index);
+		stackqueueWidget->SetIndexText(FText::FromString(indexString));
+	}
+		
+
 }
 
 void AStackQueuePawn::X()
@@ -66,8 +72,12 @@ void AStackQueuePawn::X()
 	if (stackqueueWidget->isQueue) {
 		stackqueueActor->QueuePop();
 	}
-	else 
+	else {
 		stackqueueActor->Pop();
+		int index = stackqueueActor->top + 1;
+		FString indexString = FString::FromInt(index);
+		stackqueueWidget->SetIndexText(FText::FromString(indexString));
+	}
 }
 
 void AStackQueuePawn::CallDeleFunc_OnFulled()
