@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMeshActor.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/Material.h"
 #include "StackQueue.generated.h"
 
 // Pawn C++ 기능 추가되면 사용
@@ -38,11 +39,16 @@ public:
 		AStaticMeshActor* currentTarget;
 
 	UPROPERTY()
-		UStaticMeshComponent* staitcMesh;
+		UStaticMeshComponent* staticMesh;
 
 	UPROPERTY()
 		UStaticMesh* cubeMesh;
 
+	UPROPERTY()
+		UMaterial* redMaterial;
+
+	UPROPERTY()
+		UMaterial* whiteMaterial;
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
 

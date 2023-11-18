@@ -8,9 +8,10 @@ AStackQueue::AStackQueue()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	staitcMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	staitcMesh->SetupAttachment(RootComponent);
+	staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	staticMesh->SetupAttachment(RootComponent);
 
+	// 일회성 초기화 저장을 위한 구조체
 	struct FConstructorStatics
 	{
 		ConstructorHelpers::FObjectFinder<UStaticMesh> findMesh;
@@ -22,7 +23,12 @@ AStackQueue::AStackQueue()
 	static FConstructorStatics ConstructorStatics;
 	cubeMesh = ConstructorStatics.findMesh.Object;
 
-	//staitcMesh->SetStaticMesh(cubeMesh);
+	static ConstructorHelpers::FObjectFinder<UMaterial> redMat(TEXT("/Script/Engine.Material'/Game/StackQueue/M_Base.M_Base'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> whiteMat(TEXT("/Script/Engine.Material'/Game/StarterContent/Materials/M_Basic_Wall.M_Basic_Wall'"));
+	redMaterial = redMat.Object;
+	whiteMaterial = whiteMat.Object;
+	//staticMesh->SetStaticMesh(cubeMesh);
+	//staticMesh->SetMaterial(0, redMaterial);
 }
 
 // Called when the game starts or when spawned
@@ -65,8 +71,10 @@ void AStackQueue::Push()
 	else {
 		if (currentTarget == nullptr)
 			SpawnActor(this, 0);
-		else
+		else {
+			currentTarget->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1, 1, 1));
 			SpawnActor(currentTarget, 100);
+		}
 		top++;
 	}
 }
@@ -140,6 +148,8 @@ void AStackQueue::SpawnActor(AActor* targetActor, int height)
 	AStaticMeshActor* target = (AStaticMeshActor*)GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), currentLocation, currentRotation, SpawnParams);
 	target->SetMobility(EComponentMobility::Movable);
 	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh);
+	target->GetStaticMeshComponent()->SetMaterial(0, redMaterial);
+	target->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1,0,0));
 	currentTarget = target;
 	arrTarget.Add(currentTarget);
 }
@@ -158,6 +168,7 @@ void AStackQueue::RemoveActor()
 		}
 		else {
 			currentTarget = arrTarget[top - 1];
+			currentTarget->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1, 0, 0));
 		}
 	}
 }
