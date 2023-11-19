@@ -24,9 +24,8 @@ AStackQueue::AStackQueue()
 	cubeMesh = ConstructorStatics.findMesh.Object;
 
 	static ConstructorHelpers::FObjectFinder<UMaterial> redMat(TEXT("/Script/Engine.Material'/Game/StackQueue/M_Base.M_Base'"));
-	static ConstructorHelpers::FObjectFinder<UMaterial> whiteMat(TEXT("/Script/Engine.Material'/Game/StarterContent/Materials/M_Basic_Wall.M_Basic_Wall'"));
 	redMaterial = redMat.Object;
-	whiteMaterial = whiteMat.Object;
+
 	//staticMesh->SetStaticMesh(cubeMesh);
 	//staticMesh->SetMaterial(0, redMaterial);
 }
@@ -110,7 +109,7 @@ bool AStackQueue::IsQueueEmpty()
 	return false;
 }
 
-void AStackQueue::QueuePush()
+void AStackQueue::Enqueue()
 {
 	if (IsQueueFull()){
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsQueueFull"));
@@ -124,7 +123,7 @@ void AStackQueue::QueuePush()
 
 }
 
-void AStackQueue::QueuePop()
+void AStackQueue::Dequeue()
 {
 	if (IsQueueEmpty()){
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("IsQueueEmpty"));
@@ -170,5 +169,19 @@ void AStackQueue::RemoveActor()
 			currentTarget = arrTarget[top - 1];
 			currentTarget->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1, 0, 0));
 		}
+	}
+}
+
+/* 스택 비우기 */
+void AStackQueue::ClearStack()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), top));
+	if (top > -1) {
+		for (int i = top; i > -1; i--) {
+			arrTarget[i]->Destroy();
+			arrTarget.RemoveAt(i);
+		}
+		top = -1;
+		currentTarget = nullptr;
 	}
 }

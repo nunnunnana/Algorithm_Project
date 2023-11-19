@@ -46,9 +46,7 @@ public:
 
 	UPROPERTY()
 		UMaterial* redMaterial;
-
-	UPROPERTY()
-		UMaterial* whiteMaterial;
+;
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
 
@@ -70,11 +68,13 @@ public:
 		void Pop();
 
 	UFUNCTION()
-		void QueuePush();
+		void Enqueue();
 
 	UFUNCTION()
-		void QueuePop();
+		void Dequeue();
 
+	UFUNCTION()
+		void ClearStack();
 
 protected:
 	UFUNCTION()
@@ -94,5 +94,4 @@ protected:
 
 	UFUNCTION()
 		void RemoveActor();
-
 };

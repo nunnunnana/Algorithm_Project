@@ -55,13 +55,12 @@ void AStackQueuePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AStackQueuePawn::Z()
 {
 	if (stackqueueWidget->isQueue) {
-		stackqueueActor->QueuePush();
+		stackqueueActor->Enqueue();
 	}
 	else {
 		stackqueueActor->Push();
 		int index = stackqueueActor->top + 1;
-		FString indexString = FString::FromInt(index);
-		stackqueueWidget->SetIndexText(FText::FromString(indexString));
+		stackqueueWidget->SetIndexText(index);
 	}
 		
 
@@ -70,13 +69,12 @@ void AStackQueuePawn::Z()
 void AStackQueuePawn::X()
 {
 	if (stackqueueWidget->isQueue) {
-		stackqueueActor->QueuePop();
+		stackqueueActor->Dequeue();
 	}
 	else {
 		stackqueueActor->Pop();
 		int index = stackqueueActor->top + 1;
-		FString indexString = FString::FromInt(index);
-		stackqueueWidget->SetIndexText(FText::FromString(indexString));
+		stackqueueWidget->SetIndexText(index);
 	}
 }
 
