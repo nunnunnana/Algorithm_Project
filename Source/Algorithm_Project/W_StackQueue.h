@@ -7,6 +7,8 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
+#include "Kismet/GameplayStatics.h"
+#include "StackQueue.h"
 #include "W_StackQueue.generated.h"
 
 
@@ -41,6 +43,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		UCanvasPanel* queuePanel;
 
+	UPROPERTY()
+		AStackQueue* stackqueueActor;
+
 	FTimerHandle Timer;
 
 public:
@@ -49,7 +54,7 @@ public:
 		void SetAlertText(FText text);
 
 	UFUNCTION()
-		void SetIndexText(FText text);
+		void SetIndexText(int index);
 
 	UFUNCTION()
 		void SetButtonText();

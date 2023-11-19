@@ -6,6 +6,13 @@
 void UW_StackQueue::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	// GetActorOfClass로 월드에 있는 AStackQueue 액터 찾기
+	AActor* FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AStackQueue::StaticClass());
+	// AStackQueue로 형변환
+	stackqueueActor = Cast<AStackQueue>(FoundActor);
+
+	//stackqueueActor = Cast(UGameplayStatics::GetActorOfClass(GetWorld(), AStackQueue::StaticClass()));
 	// 버튼 클릭시 호출될 델리게이트에 함수를 등록한다
 	convertButton->OnClicked.AddDynamic(this, &UW_StackQueue::SetButtonText);
 	alertText->SetVisibility(ESlateVisibility::Hidden);
@@ -23,9 +30,10 @@ void UW_StackQueue::SetAlertText(FText text)
 
 }
 
-void UW_StackQueue::SetIndexText(FText text)
+void UW_StackQueue::SetIndexText(int index)
 {
-	indexText->SetText(text);
+	FString indexString = FString::FromInt(index);
+	indexText->SetText(FText::FromString(indexString));
 }
 
 void UW_StackQueue::AdvanceTimer()
@@ -41,6 +49,8 @@ void UW_StackQueue::SetButtonText()
 		queuePanel->SetVisibility(ESlateVisibility::Hidden);
 	}
 	else {
+		stackqueueActor->ClearStack();
+		SetIndexText(0);
 		stateText->SetText(FText::FromString("Queue"));
 		stackPanel->SetVisibility(ESlateVisibility::Hidden);
 		queuePanel->SetVisibility(ESlateVisibility::Visible);
