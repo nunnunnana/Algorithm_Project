@@ -90,8 +90,15 @@ protected:
 		bool IsQueueEmpty();
 
 	UFUNCTION()
-		void SpawnActor(AActor* targetActor, int height);
+		void SpawnStackActor(AActor* targetActor, int height);
 
 	UFUNCTION()
-		void RemoveActor();
+		void RemoveStackActor();
+
+	UFUNCTION()
+		void SpawnQueueActor(AActor* targetActor, int width);
+
+	UFUNCTION()
+		void RemoveQueueActor();
+
 };
