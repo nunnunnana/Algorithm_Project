@@ -45,7 +45,7 @@ public:
 		UStaticMesh* cubeMesh;
 
 	UPROPERTY()
-		UMaterial* redMaterial;
+		UMaterial* currentMat;
 ;
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
@@ -76,6 +76,9 @@ public:
 	UFUNCTION()
 		void ClearStack();
 
+	UFUNCTION()
+		void ClearQueue();
+
 protected:
 	UFUNCTION()
 		bool IsStackFull();
@@ -101,4 +104,12 @@ protected:
 	UFUNCTION()
 		void RemoveQueueActor();
 
+	UFUNCTION()
+		void ClearActors(int num);
+
+	UFUNCTION()
+		void SpawnActor(FVector location, FVector color);
+
+	UFUNCTION()
+		void RemoveActor(int index);
 };
