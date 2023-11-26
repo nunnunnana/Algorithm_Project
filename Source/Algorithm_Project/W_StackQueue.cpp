@@ -44,6 +44,7 @@ void UW_StackQueue::AdvanceTimer()
 void UW_StackQueue::SetButtonText()
 {
 	if (isQueue == true) {
+		stackqueueActor->ClearQueue();
 		stateText->SetText(FText::FromString("Stack"));
 		stackPanel->SetVisibility(ESlateVisibility::Visible);
 		queuePanel->SetVisibility(ESlateVisibility::Hidden);
