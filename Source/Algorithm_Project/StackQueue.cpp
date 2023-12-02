@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "StackQueue.h"
+#include "Components/TimeLineComponent.h"
 
 // Sets default values
 AStackQueue::AStackQueue()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	staticMesh->SetupAttachment(RootComponent);
@@ -36,12 +37,36 @@ void AStackQueue::BeginPlay()
 {
 	Super::BeginPlay();
 	size = size + 1; // 입력값이랑 동기화 해주기 위해 설정
+
+
+	// 커브가 존재할 때 타임라인을 설정
+	if (curve != nullptr)
+	{
+		// 지정한 Curve에 사용할 Callback 함수
+		FOnTimelineFloat ProgressUpdate;
+
+		// Timeline이 끝났을 때 실행할 Callback 함수
+		//FOnTimelineEvent timelineFinishedCallback;
+
+		// Callback 함수에 사용할 함수를 바인드
+		// 바인드 하는 함수에는 UFUNCTION 매크로가 적용
+		ProgressUpdate.BindUFunction(this, FName("LocationUpdate"));
+		//timelineFinishedCallback.BindUFunction(this, FName("함수이름4"));
+
+		// Timeline에 Curve와 Curve를 사용할 Callback 함수
+		moveTimeline.AddInterpFloat(curve, ProgressUpdate);
+
+		// Timeline 끝낼때 호출할 Cabllback 함수
+		//timeline.SetTimelineFinishedFunc(timelineFinishedCallback);
+	}
+
 }
 
 // Called every frame
 void AStackQueue::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	moveTimeline.TickTimeline(DeltaTime);
 
 }
 
@@ -204,7 +229,12 @@ void AStackQueue::SpawnQueueActor(AActor* targetActor, int width)
 {
 	FVector currentLocation = targetActor->GetActorLocation();
 	currentLocation.Y += width;
+	currentLocation.Y += 500.0f;
 	SpawnActor(currentLocation, FVector(0, 0, 1));
+	currentYLocation = currentTarget->GetActorLocation().Y;
+	targetYLocation = currentTarget->GetActorLocation().Y - 500.0f;
+	// Timeline을 실행
+	moveTimeline.PlayFromStart();
 }
 
 /* 큐 액터 제거 */
@@ -272,4 +302,9 @@ void AStackQueue::RemoveActor(int index)
 {
 	arrTarget[index]->Destroy();
 	arrTarget.RemoveAt(index);
+}
+
+void AStackQueue::LocationUpdate(float Alpha)
+{
+	currentTarget->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
 }

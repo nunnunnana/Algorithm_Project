@@ -7,11 +7,14 @@
 #include "Engine/StaticMeshActor.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/Material.h"
+#include "Components/TimeLineComponent.h"
 #include "StackQueue.generated.h"
 
 // Pawn C++ 기능 추가되면 사용
 DECLARE_DELEGATE(FDele_OnFulled);
 DECLARE_DELEGATE(FDele_OnEmptied);
+
+class UCurveFloat;
 
 UCLASS()
 class ALGORITHM_PROJECT_API AStackQueue : public AActor
@@ -50,12 +53,16 @@ public:
 	UPROPERTY()
 		TArray<AStaticMeshActor*> arrTarget;
 
-		
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	FTimeline moveTimeline;
+	UPROPERTY(EditAnyWhere, Category = "Timeline")
+		UCurveFloat* curve = nullptr;
+private:
+	float currentYLocation;
+	float targetYLocation;
 
 public:	
 	// Called every frame
@@ -112,4 +119,6 @@ protected:
 
 	UFUNCTION()
 		void RemoveActor(int index);
+	UFUNCTION()
+		void LocationUpdate(float Alpha);
 };
