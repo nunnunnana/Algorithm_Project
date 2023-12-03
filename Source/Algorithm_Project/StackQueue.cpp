@@ -149,8 +149,10 @@ void AStackQueue::StackUpdate(float Alpha)
 	currentTarget->SetActorLocation(FVector(0.0f, 0.0f, FMath::Lerp(currentZLocation, targetZLocation, Alpha)));
 }
 
+// Stack 타임라인 종료 함수
 void AStackQueue::StackFinished()
 {
+	// Timeline이 Reverse 할 때만 실행
 	if (StackTimelineDirection == ETimelineDirection::Backward) {
 		RemoveStackActor();
 		top--;

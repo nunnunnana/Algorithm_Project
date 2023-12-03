@@ -61,6 +61,7 @@ void AStackQueuePawn::Z()
 		stackqueueActor->Push();
 		int index = stackqueueActor->top + 1;
 		stackqueueWidget->SetIndexText(index);
+
 	}
 		
 
@@ -73,8 +74,13 @@ void AStackQueuePawn::X()
 	}
 	else {
 		stackqueueActor->Pop();
-		int index = stackqueueActor->top;
-		stackqueueWidget->SetIndexText(index);
+		// Delay
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				int index = stackqueueActor->top + 1;
+				stackqueueWidget->SetIndexText(index);
+			}, 0.1, false);
 	}
 }
 
