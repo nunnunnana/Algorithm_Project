@@ -43,22 +43,38 @@ void AStackQueue::BeginPlay()
 	if (curve != nullptr)
 	{
 		// 지정한 Curve에 사용할 Callback 함수
-		FOnTimelineFloat ProgressUpdate;
+		FOnTimelineFloat ProgressStackUpdate;
+		FOnTimelineFloat ProgressEnqueueUpdate;
+		FOnTimelineFloat ProgressDequeueUpdate;
 
 		// Timeline이 끝났을 때 실행할 Callback 함수
-		//FOnTimelineEvent timelineFinishedCallback;
+		FOnTimelineEvent StackFinished;
+		FOnTimelineEvent DequeueFinished;
+
+		// 타임라인 Direction 설정
+		StackTimeline.SetPropertySetObject(this);
+		StackTimeline.SetDirectionPropertyName(FName("StackTimelineDirection"));
 
 		// Callback 함수에 사용할 함수를 바인드
 		// 바인드 하는 함수에는 UFUNCTION 매크로가 적용
-		ProgressUpdate.BindUFunction(this, FName("LocationUpdate"));
-		//timelineFinishedCallback.BindUFunction(this, FName("함수이름4"));
+		ProgressStackUpdate.BindUFunction(this, FName("StackUpdate"));
+		ProgressEnqueueUpdate.BindUFunction(this, FName("EnqueueUpdate"));
+		ProgressDequeueUpdate.BindUFunction(this, FName("DequeueUpdate"));
+		StackFinished.BindUFunction(this, FName("StackFinished"));
+		DequeueFinished.BindUFunction(this, FName("DequeueFinished"));
 
 		// Timeline에 Curve와 Curve를 사용할 Callback 함수
-		moveTimeline.AddInterpFloat(curve, ProgressUpdate);
+		StackTimeline.AddInterpFloat(curve, ProgressStackUpdate);
+		EnqueueTimeline.AddInterpFloat(curve, ProgressEnqueueUpdate);
+		DequeueTimeline.AddInterpFloat(curve, ProgressDequeueUpdate);
 
 		// Timeline 끝낼때 호출할 Cabllback 함수
-		//timeline.SetTimelineFinishedFunc(timelineFinishedCallback);
+		StackTimeline.SetTimelineFinishedFunc(StackFinished);
+		DequeueTimeline.SetTimelineFinishedFunc(DequeueFinished);
+	
 	}
+
+	
 
 }
 
@@ -66,8 +82,9 @@ void AStackQueue::BeginPlay()
 void AStackQueue::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	moveTimeline.TickTimeline(DeltaTime);
-
+	StackTimeline.TickTimeline(DeltaTime);
+	EnqueueTimeline.TickTimeline(DeltaTime);
+	DequeueTimeline.TickTimeline(DeltaTime);
 }
 
 /*
@@ -101,7 +118,7 @@ void AStackQueue::Push()
 		if (OnFulled.IsBound() == true)
 			OnFulled.Execute();
 	}
-	else {
+	else if (!StackTimeline.IsPlaying()) {
 		// 처음 생성하면 현재 위치에 생성
 		if (currentTarget == nullptr)
 			SpawnStackActor(this, 0);
@@ -121,10 +138,24 @@ void AStackQueue::Pop()
 		if (OnEmptied.IsBound() == true)
 			OnEmptied.Execute();
 	}
-	else {
+	else if(!StackTimeline.IsPlaying()) {
+		StackTimeline.ReverseFromEnd();
+	}
+}
+
+// 스택 타임라인 업데이트 함수
+void AStackQueue::StackUpdate(float Alpha)
+{
+	currentTarget->SetActorLocation(FVector(0.0f, 0.0f, FMath::Lerp(currentZLocation, targetZLocation, Alpha)));
+}
+
+void AStackQueue::StackFinished()
+{
+	if (StackTimelineDirection == ETimelineDirection::Backward) {
 		RemoveStackActor();
 		top--;
 	}
+
 }
 
 /* 스택 액터 생성 */
@@ -132,7 +163,12 @@ void AStackQueue::SpawnStackActor(AActor* targetActor, int height)
 {
 	FVector currentLocation = targetActor->GetActorLocation();
 	currentLocation.Z += height; 
+	currentLocation.Z += 500.0f;
 	SpawnActor(currentLocation, FVector(1, 0, 0));
+	currentZLocation = currentTarget->GetActorLocation().Z;
+	targetZLocation = currentTarget->GetActorLocation().Z - 500.0f;
+	// Timeline 실행
+	StackTimeline.PlayFromStart();
 }
 
 /* 스택 액터 제거 */
@@ -149,6 +185,8 @@ void AStackQueue::RemoveStackActor()
 		else {
 			currentTarget = arrTarget[top - 1];
 			currentTarget->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1, 0, 0));
+			currentZLocation = currentTarget->GetActorLocation().Z + 500.0f;
+			targetZLocation = currentTarget->GetActorLocation().Z;
 		}
 	}
 }
@@ -190,7 +228,7 @@ void AStackQueue::Enqueue()
 		if (OnFulled.IsBound() == true)
 			OnFulled.Execute();
 	}
-	else {
+	else if(!EnqueueTimeline.IsPlaying() && !DequeueTimeline.IsPlaying()){
 		rear = (rear + 1) % size;
 		// 처음 생성하면 현재 위치에 생성
 		if (currentTarget == nullptr) {
@@ -207,7 +245,6 @@ void AStackQueue::Enqueue()
 			arrTarget[0]->GetStaticMeshComponent()->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(1, 0, 0));
 		}
 	}
-
 }
 
 void AStackQueue::Dequeue()
@@ -216,7 +253,7 @@ void AStackQueue::Dequeue()
 		if (OnEmptied.IsBound() == true)
 			OnEmptied.Execute();
 	}
-	else {
+	else if(!EnqueueTimeline.IsPlaying() && !DequeueTimeline.IsPlaying()) {
 		front = (front + 1) % size;
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), front));
 		RemoveQueueActor();
@@ -233,12 +270,34 @@ void AStackQueue::SpawnQueueActor(AActor* targetActor, int width)
 	SpawnActor(currentLocation, FVector(0, 0, 1));
 	currentYLocation = currentTarget->GetActorLocation().Y;
 	targetYLocation = currentTarget->GetActorLocation().Y - 500.0f;
-	// Timeline을 실행
-	moveTimeline.PlayFromStart();
+	// Timeline 실행
+	EnqueueTimeline.PlayFromStart();
+}
+
+
+// Enqueue 타임라인 업데이트 함수
+void AStackQueue::EnqueueUpdate(float Alpha)
+{
+	currentTarget->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
 }
 
 /* 큐 액터 제거 */
 void AStackQueue::RemoveQueueActor()
+{
+	currentYLocation = 0;
+	targetYLocation = -500.0f;
+	// Timeline을 실행
+	DequeueTimeline.PlayFromStart();
+}
+
+// Dequeue 타임라인 업데이트 함수
+void AStackQueue::DequeueUpdate(float Alpha)
+{
+	arrTarget[0]->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
+}
+
+// Dequeue 타임라인 종료 함수
+void AStackQueue::DequeueFinished()
 {
 	// 마지막 인덱스면 삭제 후 currentTarget초기화
 	if (IsQueueEmpty()) {
@@ -302,9 +361,4 @@ void AStackQueue::RemoveActor(int index)
 {
 	arrTarget[index]->Destroy();
 	arrTarget.RemoveAt(index);
-}
-
-void AStackQueue::LocationUpdate(float Alpha)
-{
-	currentTarget->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
 }

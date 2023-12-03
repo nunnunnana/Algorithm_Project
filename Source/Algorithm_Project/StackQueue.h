@@ -57,10 +57,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	FTimeline moveTimeline;
+	FTimeline StackTimeline;
+	FTimeline EnqueueTimeline;
+	FTimeline DequeueTimeline;
+
+	UPROPERTY()
+		TEnumAsByte<ETimelineDirection::Type> StackTimelineDirection;
+
 	UPROPERTY(EditAnyWhere, Category = "Timeline")
 		UCurveFloat* curve = nullptr;
 private:
+	float currentZLocation;
+	float targetZLocation;
 	float currentYLocation;
 	float targetYLocation;
 
@@ -120,5 +128,13 @@ protected:
 	UFUNCTION()
 		void RemoveActor(int index);
 	UFUNCTION()
-		void LocationUpdate(float Alpha);
+		void StackUpdate(float Alpha);
+	UFUNCTION()
+		void StackFinished();
+	UFUNCTION()
+		void EnqueueUpdate(float Alpha);
+	UFUNCTION()
+		void DequeueUpdate(float Alpha);
+	UFUNCTION()
+		void DequeueFinished();
 };
