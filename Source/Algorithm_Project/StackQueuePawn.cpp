@@ -73,7 +73,7 @@ void AStackQueuePawn::X()
 	}
 	else {
 		stackqueueActor->Pop();
-		int index = stackqueueActor->top + 1;
+		int index = stackqueueActor->top;
 		stackqueueWidget->SetIndexText(index);
 	}
 }
