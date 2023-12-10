@@ -25,7 +25,7 @@ AStackQueue::AStackQueue()
 	cubeMesh = ConstructorStatics.findMesh.Object;
 
 	// 머티리얼 설정
-	static ConstructorHelpers::FObjectFinder<UMaterial> findMat(TEXT("/Script/Engine.Material'/Game/StackQueue/M_Base.M_Base'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> findMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base.M_Base'"));
 	currentMat = findMat.Object;
 
 	//staticMesh->SetStaticMesh(cubeMesh);
