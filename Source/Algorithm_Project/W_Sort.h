@@ -22,9 +22,12 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* sortButton;
+	UPROPERTY(meta = (BindWidget))
+	UButton* shuffleButton;
 
 public:
 	UFUNCTION()
 	void StartSort();
-
+	UFUNCTION()
+	void StartShuffle();
 };
