@@ -31,8 +31,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+	UMaterialInstance* currentMat;
+
 	void Z();
 	void X();
+	void C();
 
 public:
 	// Called every frame

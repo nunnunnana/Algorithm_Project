@@ -15,6 +15,8 @@ ASortPawn::ASortPawn()
 		sortWidgetClass = sortWidgetAsset.Class;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findMat(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/Asset/Material/M_Base_Red.M_Base_Red'"));
+	currentMat = findMat.Object;
 
 }
 
@@ -46,14 +48,21 @@ void ASortPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Z", IE_Pressed, this, &ASortPawn::Z);
 	PlayerInputComponent->BindAction("X", IE_Pressed, this, &ASortPawn::X);
+	PlayerInputComponent->BindAction("C", IE_Pressed, this, &ASortPawn::C);
 }
 
 void ASortPawn::Z()
 {
-	
+	sortActor->ShuffleArray();
 }
 
 void ASortPawn::X()
 {
-	
+	sortActor->SelectionSort();
+}
+
+void ASortPawn::C()
+{
+	sortActor->SetArrTargetColor(currentMat, 0);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
 }
