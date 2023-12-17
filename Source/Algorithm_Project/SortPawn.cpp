@@ -44,6 +44,16 @@ void ASortPawn::Tick(float DeltaTime)
 void ASortPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Z", IE_Pressed, this, &ASortPawn::Z);
+	PlayerInputComponent->BindAction("X", IE_Pressed, this, &ASortPawn::X);
 }
 
+void ASortPawn::Z()
+{
+	
+}
 
+void ASortPawn::X()
+{
+	
+}

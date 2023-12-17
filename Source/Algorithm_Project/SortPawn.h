@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasicPawn.h"
+#include "SortActor.h"
 #include "W_Sort.h"
 #include "SortPawn.generated.h"
 
@@ -19,6 +20,8 @@ public:
 	// Sets default values for this pawn's properties
 	ASortPawn();
 
+	UPROPERTY(EditAnyWhere)
+	ASortActor* sortActor;
 
 	TSubclassOf<UUserWidget> sortWidgetClass;
 	UW_Sort* sortWidget;
@@ -27,6 +30,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void Z();
+	void X();
 
 public:
 	// Called every frame
