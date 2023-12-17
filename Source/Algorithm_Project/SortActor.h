@@ -28,6 +28,9 @@ protected:
 	ASortActorMesh* currentTarget;
 
 	UPROPERTY()
+	UMaterialInstance* currentMat;
+
+	UPROPERTY()
 	TArray<ASortActorMesh*> arrTarget;
 
 	UFUNCTION()
@@ -37,13 +40,19 @@ protected:
 	void SetArrayLocation();
 
 	UFUNCTION()
-	void ShuffleArray();
-
-	UFUNCTION()
-	void SelectionSort();
+	void Init();
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void ShuffleArray();
+
+	UFUNCTION()
+	void SetArrTargetColor(UMaterialInstance* material, int targetIndex);
+
+	UFUNCTION()
+	void SelectionSort();
 
 };

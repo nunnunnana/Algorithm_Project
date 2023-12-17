@@ -8,6 +8,9 @@ ASortActor::ASortActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findMat(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/Asset/Material/M_Base_White.M_Base_White'"));
+	currentMat = findMat.Object;
 }
 
 // Called when the game starts or when spawned
@@ -26,8 +29,6 @@ void ASortActor::BeginPlay()
 			SpawnActor(currentTarget, i);
 		}
 	}
-
-	ShuffleArray();
 }
 
 // Called every frame
@@ -64,6 +65,7 @@ void ASortActor::SetArrayLocation()
 // arrTarget 배열 셔플 함수
 void ASortActor::ShuffleArray()
 {
+	Init();
 	if (arrTarget.Num() > 0){
 		int32 LastIndex = arrTarget.Num() - 1;
 		for (int32 i = 0; i <= LastIndex; ++i){
@@ -76,18 +78,33 @@ void ASortActor::ShuffleArray()
 	SetArrayLocation();
 }
 
+// 초기화 함수
+void ASortActor::Init()
+{
+	for (int i = 0; i < arrTarget.Num(); i++) {
+		SetArrTargetColor(currentMat, i);
+	}
+}
+
+// 색상 설정 함수
+void ASortActor::SetArrTargetColor(UMaterialInstance* material, int targetIndex)
+{
+	arrTarget[targetIndex]->SetActorColor(material);
+
+}
 
 // 선택 정렬 함수
 void ASortActor::SelectionSort()
 {
+	Init();
 	for (int i = 0; i < arrTarget.Num() - 1; i++) {
 		int tmp = i;
 		for (int j = i + 1; j < arrTarget.Num(); j++) {
 			if (arrTarget[tmp]->index >= arrTarget[j]->index) {
 				tmp = j;
 			}
-			Swap(arrTarget[i], arrTarget[tmp]);
 		}
+		Swap(arrTarget[i], arrTarget[tmp]);
 	}
 	SetArrayLocation();
 }
