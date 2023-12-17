@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "SortActorMesh.h"
+#include "Kismet/KismetArrayLibrary.h"
 #include "SortActor.generated.h"
 
 UCLASS()
@@ -15,9 +17,30 @@ public:
 	// Sets default values for this actor's properties
 	ASortActor();
 
+	UPROPERTY(EditAnyWhere)
+	int size;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
+	ASortActorMesh* currentTarget;
+
+	UPROPERTY()
+	TArray<ASortActorMesh*> arrTarget;
+
+	UFUNCTION()
+	void SpawnActor(AActor* targetActor, int actorIndex);
+
+	UFUNCTION()
+	void SetArrayLocation();
+
+	UFUNCTION()
+	void ShuffleArray();
+
+	UFUNCTION()
+	void SelectionSort();
 
 public:	
 	// Called every frame
