@@ -8,6 +8,9 @@ ASortActorMesh::ASortActorMesh()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	staticMesh->SetupAttachment(RootComponent);
 
 	// 일회성 초기화 저장을 위한 구조체
 	struct FConstructorStatics
@@ -29,11 +32,20 @@ ASortActorMesh::ASortActorMesh()
 void ASortActorMesh::BeginPlay()
 {
 	Super::BeginPlay();
-	// index 값 만큼 메시 Spawn
-	for (int i = 0; i <= index; i++) {
-		SpawnMesh(i);
-	}
-	//SetActorColor(currentMat);
+
+	FTimerHandle delayTimerHandle;
+	float delayTime = 0.2f;
+
+	GetWorld()->GetTimerManager().SetTimer(delayTimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			// index 값 만큼 메시 Spawn
+			for (int i = 0; i <= index; i++) {
+				SpawnMesh(i);
+			}
+			//SetActorColor(currentMat);
+			// TimerHandle 초기화
+			GetWorld()->GetTimerManager().ClearTimer(delayTimerHandle);
+		}), delayTime, false);	// 반복하려면 false를 true로 변경
 }
 
 // StaticmeshComponent의 mesh, mobility 설정 함수
