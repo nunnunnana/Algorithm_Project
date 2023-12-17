@@ -35,11 +35,11 @@ protected:
 	UFUNCTION()
 	void SpawnMesh(int height);
 
-	UFUNCTION()
-	void SetActorColor(UMaterialInstance* material);
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void SetActorColor(UMaterialInstance* material);
 
 };
