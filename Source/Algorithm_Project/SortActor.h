@@ -24,14 +24,33 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	int index;
+	int currentIndex;
+	int tmp;
+
+	bool IsSorting;
+
 	UPROPERTY()
 	ASortActorMesh* currentTarget;
 
 	UPROPERTY()
-	UMaterialInstance* currentMat;
+	UMaterialInstance* whiteMat;
+
+	UPROPERTY()
+	UMaterialInstance* yellowtMat;
+
+	UPROPERTY()
+	UMaterialInstance* redMat;
+
+	UPROPERTY()
+	UMaterialInstance* blueMat;
 
 	UPROPERTY()
 	TArray<ASortActorMesh*> arrTarget;
+
+	FTimerHandle Timer;
+
+	void SetSelectionSortColor();
 
 	UFUNCTION()
 	void SpawnActor(AActor* targetActor, int actorIndex);
@@ -54,5 +73,8 @@ public:
 
 	UFUNCTION()
 	void SelectionSort();
+
+	UFUNCTION()
+	void StartSelectionSort();
 
 };
