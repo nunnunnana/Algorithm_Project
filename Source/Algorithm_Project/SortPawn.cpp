@@ -53,16 +53,15 @@ void ASortPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ASortPawn::Z()
 {
-	sortActor->ShuffleArray();
+
 }
 
 void ASortPawn::X()
 {
-	sortActor->SelectionSort();
+
 }
 
 void ASortPawn::C()
 {
-	sortActor->SetArrTargetColor(currentMat, 0);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
+
 }
