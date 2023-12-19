@@ -7,6 +7,11 @@ void UW_Sort::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// GetActorOfClass로 월드에 있는 ASortActor 액터 찾기
+	AActor* FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), ASortActor::StaticClass());
+	// ASortActor로 형변환
+	sortActor = Cast<ASortActor>(FoundActor);
+
 	// 버튼 클릭시 호출될 델리게이트에 함수를 등록한다
 	sortButton->OnClicked.AddDynamic(this, &UW_Sort::StartSort);
 	shuffleButton->OnClicked.AddDynamic(this, &UW_Sort::StartShuffle);
@@ -15,10 +20,10 @@ void UW_Sort::NativeConstruct()
 
 void UW_Sort::StartSort()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Sort"));
+	sortActor->SelectionSort();
 }
 
 void UW_Sort::StartShuffle()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Shuffle"));
+	sortActor->ShuffleArray();
 }

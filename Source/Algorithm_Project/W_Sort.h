@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "SortActor.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 #include "W_Sort.generated.h"
 
 /**
@@ -20,10 +22,14 @@ public:
 
 private:
 
+
 	UPROPERTY(meta = (BindWidget))
 	UButton* sortButton;
 	UPROPERTY(meta = (BindWidget))
 	UButton* shuffleButton;
+
+	UPROPERTY(EditAnyWhere)
+	ASortActor* sortActor;
 
 public:
 	UFUNCTION()
