@@ -9,6 +9,7 @@ ASortActor::ASortActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// materialinstance 레퍼런스 설정
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findwhiteMat(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/Asset/Material/M_Base_White.M_Base_White'"));
 	whiteMat = findwhiteMat.Object;
 
@@ -59,7 +60,6 @@ void ASortActor::SpawnActor(AActor* targetActor, int actorIndex)
 	currentTarget = target;
 	currentTarget->index = actorIndex;
 	arrTarget.Add(currentTarget);
-
 }
 
 // 배열의 인덱스 위치와 Location 값 동기화 함수
@@ -78,9 +78,9 @@ void ASortActor::ShuffleArray()
 	if (IsSorting == false) {
 		Init();
 		if (arrTarget.Num() > 0) {
-			int32 LastIndex = arrTarget.Num() - 1;
-			for (int32 i = 0; i <= LastIndex; ++i) {
-				int32 Index = FMath::RandRange(i, LastIndex);
+			int lastIndex = arrTarget.Num() - 1;
+			for (int i = 0; i <= lastIndex; ++i) {
+				int Index = FMath::RandRange(i, lastIndex);
 				if (i != Index) {
 					arrTarget.Swap(i, Index);
 				}
@@ -90,7 +90,7 @@ void ASortActor::ShuffleArray()
 	}
 }
 
-// 초기화 함수
+// 색상 초기화 함수
 void ASortActor::Init()
 {
 	for (int i = 0; i < arrTarget.Num(); i++) {
@@ -102,7 +102,6 @@ void ASortActor::Init()
 void ASortActor::SetArrTargetColor(UMaterialInstance* material, int targetIndex)
 {
 	arrTarget[targetIndex]->SetActorColor(material);
-
 }
 
 // 정렬 알고리즘 시작 함수
@@ -114,17 +113,6 @@ void ASortActor::SelectionSort()
 		StartSelectionSort();
 		IsSorting = true;
 	}
-
-	//for (int i = 0; i < arrTarget.Num() - 1; i++) {
-	//	int tmp = i;
-	//	for (int j = i + 1; j < arrTarget.Num(); j++) {
-	//		if (arrTarget[tmp]->index >= arrTarget[j]->index) {
-	//			tmp = j;
-	//		}
-	//	}
-	//	Swap(arrTarget[i], arrTarget[tmp]);
-	//}
-	//SetArrayLocation();
 }
 
 // 선택 정렬 함수
@@ -138,16 +126,18 @@ void ASortActor::StartSelectionSort()
 		tmp = index;
 		SetArrTargetColor(redMat, tmp);
 		currentIndex = index + 1;
-		// 타이머 설정
-		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetSelectionSortColor, 0.1f, true, 0.0f);
+		// 0.02초 마다 SetSelectionSortColor 함수 실행
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetSelectionSortColor, 0.02f, true, 0.0f);
 	}
 }
 
+// 가장 낮은 Index 찾은 후 색상 변경
 void ASortActor::SetSelectionSortColor()
 {
 	if (currentIndex - 1 != tmp) {
 		SetArrTargetColor(whiteMat, currentIndex - 1);
 	}
+	// index와 tmp의 arrTarget 배열 원소 위치 변경 후 노란색으로 설정
 	if (currentIndex >= arrTarget.Num()) {
 		// 타이머 초기화
 		GetWorld()->GetTimerManager().ClearTimer(Timer);
@@ -158,6 +148,7 @@ void ASortActor::SetSelectionSortColor()
 		StartSelectionSort();
 	}
 	else {
+		// 가장 낮은 Index를 가진 원소의 색상을 빨간색으로 설정
 		if (arrTarget[tmp]->index >= arrTarget[currentIndex]->index) {
 			SetArrTargetColor(whiteMat, tmp);
 			tmp = currentIndex;
