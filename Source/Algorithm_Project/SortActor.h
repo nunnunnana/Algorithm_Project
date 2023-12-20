@@ -52,6 +52,10 @@ protected:
 
 	void SetSelectionSortColor();
 
+	void SetInjectionSortColor();
+
+	void SetBubbleSortColor();
+
 	UFUNCTION()
 	void SpawnActor(AActor* targetActor, int actorIndex);
 
@@ -76,5 +80,17 @@ public:
 
 	UFUNCTION()
 	void StartSelectionSort();
+
+	UFUNCTION()
+	void InjectionSort();
+
+	UFUNCTION()
+	void StartInjectionSort();
+
+	UFUNCTION()
+	void BubbleSort();
+
+	UFUNCTION()
+	void StartBubbleSort();
 
 };

@@ -160,3 +160,94 @@ void ASortActor::SetSelectionSortColor()
 		currentIndex++;
 	}
 }
+
+// 정렬 알고리즘 시작 함수
+void ASortActor::InjectionSort()
+{
+	if (IsSorting == false) {
+		Init();
+		index = 1;
+		StartInjectionSort();
+		IsSorting = true;
+	}
+}
+
+// 선택 정렬 함수
+void ASortActor::StartInjectionSort()
+{
+	if (index > arrTarget.Num() - 1) {
+		IsSorting = false;
+	}
+	else {
+		tmp = arrTarget[index]->index;
+		currentIndex = index - 1;
+		// 0.02초 마다 SetInjectionSortColor 함수 실행
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetInjectionSortColor, 0.02f, true, 0.0f);
+	}
+}
+
+// 원소 비교 후 색상 설정
+void ASortActor::SetInjectionSortColor()
+{
+	if (currentIndex >= 0 && tmp < arrTarget[currentIndex]->index) {
+		SetArrTargetColor(whiteMat, currentIndex);
+		SetArrTargetColor(blueMat, currentIndex + 1);
+		arrTarget.Swap(currentIndex, currentIndex + 1);
+		currentIndex--;
+		SetArrayLocation();
+	}
+	else {
+		GetWorld()->GetTimerManager().ClearTimer(Timer);
+		arrTarget[currentIndex + 1]->index = tmp;
+		SetArrTargetColor(whiteMat, currentIndex + 1);
+		index++;
+		StartInjectionSort();
+	}
+}
+
+// 버블 정렬 함수
+void ASortActor::BubbleSort()
+{
+	if (IsSorting == false) {
+		Init();
+		index = 0;
+		currentIndex = 1;
+		StartBubbleSort();
+		IsSorting = true;
+	}
+}
+
+// 선택 정렬 함수
+void ASortActor::StartBubbleSort()
+{
+	if (index >= arrTarget.Num() - 1) {
+		IsSorting = false;
+	}
+	else {
+		if (currentIndex >= arrTarget.Num() - index) {
+			index++;
+			currentIndex = 1;
+			StartBubbleSort();
+		}
+		else {
+			tmp = currentIndex - 1;
+			SetArrTargetColor(blueMat, currentIndex);
+			SetArrTargetColor(blueMat, tmp);
+		}
+		// 0.02초 마다 SetBubbleSortColor 함수 실행
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.02f, false, 0.0f);
+	}
+}
+
+// 원소 비교 후 색상 설정
+void ASortActor::SetBubbleSortColor()
+{
+	SetArrTargetColor(whiteMat, currentIndex);
+	SetArrTargetColor(whiteMat, tmp);
+	if (arrTarget[tmp]->index > arrTarget[currentIndex]->index) {
+		arrTarget.Swap(currentIndex, tmp);
+	}
+	currentIndex++;
+	StartBubbleSort();
+	SetArrayLocation();
+}
