@@ -53,12 +53,12 @@ void ASortPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ASortPawn::Z()
 {
-
+	sortActor->ShuffleArray();
 }
 
 void ASortPawn::X()
 {
-
+	sortActor->BubbleSort();
 }
 
 void ASortPawn::C()
