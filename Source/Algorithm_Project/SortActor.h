@@ -56,6 +56,8 @@ protected:
 
 	void SetBubbleSortColor();
 
+	void SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m);
+
 	UFUNCTION()
 	void SpawnActor(AActor* targetActor, int actorIndex);
 
@@ -92,5 +94,11 @@ public:
 
 	UFUNCTION()
 	void StartBubbleSort();
+
+	UFUNCTION()
+	void MergeSort();
+
+	UFUNCTION()
+	void StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
 
 };

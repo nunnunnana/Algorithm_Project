@@ -231,23 +231,69 @@ void ASortActor::StartBubbleSort()
 		}
 		else {
 			tmp = currentIndex - 1;
-			SetArrTargetColor(blueMat, currentIndex);
-			SetArrTargetColor(blueMat, tmp);
+			// Tmp가 CurrentIndex보다 크면 스왑 후 빨간색으로 변경, 스왑 안하면 파란색으로 변경
+			if (arrTarget[tmp]->index > arrTarget[currentIndex]->index) {
+				arrTarget.Swap(currentIndex, tmp);
+				SetArrTargetColor(redMat, currentIndex);
+				SetArrTargetColor(redMat, tmp);
+			}
+			else {
+				SetArrTargetColor(blueMat, currentIndex);
+				SetArrTargetColor(blueMat, tmp);
+			}
+			// 0.02초 마다 SetBubbleSortColor 함수 실행
+			GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.02f, false, 0.0f);
 		}
-		// 0.02초 마다 SetBubbleSortColor 함수 실행
-		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.02f, false, 0.0f);
 	}
 }
 
-// 원소 비교 후 색상 설정
+// 기본색으로 변경 후 다음 원소 비교 시작
 void ASortActor::SetBubbleSortColor()
 {
 	SetArrTargetColor(whiteMat, currentIndex);
 	SetArrTargetColor(whiteMat, tmp);
-	if (arrTarget[tmp]->index > arrTarget[currentIndex]->index) {
-		arrTarget.Swap(currentIndex, tmp);
-	}
 	currentIndex++;
 	StartBubbleSort();
+	SetArrayLocation();
+}
+
+// 합병 정렬 함수
+void ASortActor::MergeSort()
+{
+	StartMergeSort(arrTarget, 0, arrTarget.Num() - 1);
+}
+
+// 선택 정렬 함수
+void ASortActor::StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex)
+{
+	if (firstIndex < lastIndex) {
+		int m = (firstIndex + lastIndex) / 2;
+		StartMergeSort(arr, firstIndex, m);
+		StartMergeSort(arr, m + 1, lastIndex);
+		SetArrayLocation();
+	}
+}
+
+// 기본색으로 변경 후 다음 원소 비교 시작
+void ASortActor::SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m)
+{
+	TArray<ASortActorMesh*> ret;
+	int i = s, j = m + 1, copy = 0;
+
+	while (i <= m && j <= e) {
+		if (v[i]->index < v[j]->index)
+			ret.Add(v[i++]);
+		else if (v[i]->index > v[j]->index)
+			ret.Add(v[j++]);
+	}
+
+	while (i <= m)
+		ret.Add(v[i++]);
+	while (j <= e)
+		ret.Add(v[j++]);
+
+	for (int k = s; k <= e; k++) {
+		v[k] = ret[copy++];
+	}
 	SetArrayLocation();
 }
