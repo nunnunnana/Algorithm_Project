@@ -58,7 +58,7 @@ void ASortPawn::Z()
 
 void ASortPawn::X()
 {
-	sortActor->BubbleSort();
+	sortActor->MergeSort();
 }
 
 void ASortPawn::C()
