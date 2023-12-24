@@ -241,7 +241,7 @@ void ASortActor::StartBubbleSort()
 				SetArrTargetColor(blueMat, currentIndex);
 				SetArrTargetColor(blueMat, tmp);
 			}
-			// 0.02초 마다 SetBubbleSortColor 함수 실행
+			// 0.02초 뒤에 SetBubbleSortColor 함수 실행
 			GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.02f, false, 0.0f);
 		}
 	}
@@ -270,6 +270,7 @@ void ASortActor::StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, in
 		int m = (firstIndex + lastIndex) / 2;
 		StartMergeSort(arr, firstIndex, m);
 		StartMergeSort(arr, m + 1, lastIndex);
+		SetMergeSortColor(arr, firstIndex, lastIndex, m);
 		SetArrayLocation();
 	}
 }
@@ -291,9 +292,47 @@ void ASortActor::SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int
 		ret.Add(v[i++]);
 	while (j <= e)
 		ret.Add(v[j++]);
-
+	
 	for (int k = s; k <= e; k++) {
+		index = k;
 		v[k] = ret[copy++];
 	}
-	SetArrayLocation();
 }
+
+// 퀵 정렬 함수
+void ASortActor::QuickSort()
+{
+	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
+}
+
+// 선택 정렬 함수
+void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
+{
+	int pivot = arr[s]->index;
+	int bs = s, be = e;
+	while (s < e) {
+		while (pivot <= arr[e]->index && s < e) {
+			e--;
+		}
+		if (s > e) {
+			break;
+		}
+		while (pivot >= arr[s]->index && s < e) {
+			s++;
+		}
+		if (s > e) {
+			break;
+		}
+		Swap(arr[s], arr[e]);
+	}
+	
+	Swap(arr[bs], arr[s]);
+	if (bs < s) {
+		StartQuickSort(arr, bs, s - 1);
+	}
+	if (be > e) {
+		StartQuickSort(arr, s + 1, be);
+	}
+
+}
+

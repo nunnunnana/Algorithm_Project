@@ -27,11 +27,13 @@ protected:
 	int index;
 	int currentIndex;
 	int tmp;
-
 	bool IsSorting;
 
 	UPROPERTY()
 	ASortActorMesh* currentTarget;
+
+	UPROPERTY()
+	ASortActorMesh* arget;
 
 	UPROPERTY()
 	UMaterialInstance* whiteMat;
@@ -100,5 +102,12 @@ public:
 
 	UFUNCTION()
 	void StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
+
+
+	UFUNCTION()
+	void QuickSort();
+
+	UFUNCTION()
+	void StartQuickSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
 
 };
