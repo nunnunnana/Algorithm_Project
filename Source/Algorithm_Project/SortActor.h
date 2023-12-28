@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SortActorMesh.h"
 #include "Kismet/KismetArrayLibrary.h"
+#include "Components/TimeLineComponent.h"
 #include "SortActor.generated.h"
 
 UCLASS()
@@ -51,14 +52,21 @@ protected:
 	TArray<ASortActorMesh*> arrTarget;
 
 	FTimerHandle Timer;
-
+	UFUNCTION()
 	void SetSelectionSortColor();
 
+	UFUNCTION()
 	void SetInjectionSortColor();
 
+	UFUNCTION()
 	void SetBubbleSortColor();
 
+	UFUNCTION()
 	void SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m);
+
+
+	UFUNCTION()
+	void Merge_Test(TArray<ASortActorMesh*>& v, int s);
 
 	UFUNCTION()
 	void SpawnActor(AActor* targetActor, int actorIndex);
@@ -95,14 +103,13 @@ public:
 	void BubbleSort();
 
 	UFUNCTION()
-	void StartBubbleSort();
+	void StartBubbleSort(); 
 
 	UFUNCTION()
 	void MergeSort();
 
 	UFUNCTION()
 	void StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
-
 
 	UFUNCTION()
 	void QuickSort();

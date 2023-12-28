@@ -268,9 +268,17 @@ void ASortActor::StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, in
 {
 	if (firstIndex < lastIndex) {
 		int m = (firstIndex + lastIndex) / 2;
-		StartMergeSort(arr, firstIndex, m);
+		StartMergeSort(arr, firstIndex, m); 
 		StartMergeSort(arr, m + 1, lastIndex);
 		SetMergeSortColor(arr, firstIndex, lastIndex, m);
+
+		//FTimerDelegate TimerDel;
+		//FTimerHandle TimerHandle;
+
+		//TimerDel.BindUFunction(this, FName("SetMergeSortColor"), arr, firstIndex, lastIndex, m);
+		////Calling MyUsefulFunction after 5 seconds without looping
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.5f, false);
+
 		SetArrayLocation();
 	}
 }
@@ -294,15 +302,28 @@ void ASortActor::SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int
 		ret.Add(v[j++]);
 	
 	for (int k = s; k <= e; k++) {
-		index = k;
+
 		v[k] = ret[copy++];
+		//FTimerDelegate TimerDel;
+		//FTimerHandle TimerHandle;
+
+		//TimerDel.BindUFunction(this, FName("Merge_Test"), ret, copy);
+		////Calling MyUsefulFunction after 5 seconds without looping
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.5f, false);
 	}
+}
+
+// 기본색으로 변경 후 다음 원소 비교 시작
+void ASortActor::Merge_Test(TArray<ASortActorMesh*>& v, int s)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
 }
 
 // 퀵 정렬 함수
 void ASortActor::QuickSort()
 {
 	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
+	SetArrayLocation();
 }
 
 // 선택 정렬 함수
