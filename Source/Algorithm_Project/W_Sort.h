@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "SortActor.h"
 #include "Components/Button.h"
+#include "Components/ComboBoxString.h"
 #include "Kismet/GameplayStatics.h"
 #include "W_Sort.generated.h"
 
@@ -22,11 +23,16 @@ public:
 
 private:
 
+	UPROPERTY()
+	FString selectedName = ("Selection Sort");
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* sortButton;
 	UPROPERTY(meta = (BindWidget))
 	UButton* shuffleButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UComboBoxString* sortComboBox;
 
 	UPROPERTY(EditAnyWhere)
 	ASortActor* sortActor;
@@ -34,6 +40,10 @@ private:
 public:
 	UFUNCTION()
 	void StartSort();
+
 	UFUNCTION()
 	void StartShuffle();
+
+	UFUNCTION()
+	void SelectedChange(FString selectedItem, ESelectInfo::Type selectionType);
 };
