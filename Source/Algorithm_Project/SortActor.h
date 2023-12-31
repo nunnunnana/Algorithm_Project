@@ -28,6 +28,9 @@ protected:
 	int index;
 	int currentIndex;
 	int tmp;
+	int bstart;
+	int start;
+	int end;
 	bool IsSorting;
 
 	UPROPERTY()
@@ -64,6 +67,14 @@ protected:
 	UFUNCTION()
 	void SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m);
 
+	UFUNCTION()
+	void SetQuickSortColor(TArray<ASortActorMesh*>& arr, int s, int e, int bs, int be);
+
+	UFUNCTION()
+	void QuickTest();
+
+	UFUNCTION()
+	void QuickTest_1();
 
 	UFUNCTION()
 	void Merge_Test(TArray<ASortActorMesh*>& v, int s);

@@ -2,6 +2,8 @@
 
 
 #include "SortActor.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 // Sets default values
 ASortActor::ASortActor()
@@ -323,7 +325,6 @@ void ASortActor::Merge_Test(TArray<ASortActorMesh*>& v, int s)
 void ASortActor::QuickSort()
 {
 	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
-	SetArrayLocation();
 }
 
 // 선택 정렬 함수
@@ -348,12 +349,77 @@ void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 	}
 	
 	Swap(arr[bs], arr[s]);
+	SetArrTargetColor(blueMat, bs);
+	SetArrTargetColor(blueMat, s);
+
+	FTimerHandle delayTimerHandle;
+	float delayTime = 0.2f;
+
+	GetWorld()->GetTimerManager().SetTimer(delayTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
+		{
+			SetArrTargetColor(whiteMat, bs);
+			SetArrTargetColor(whiteMat, s);
+			if (bs < s) {
+				StartQuickSort(arrTarget, bs, s - 1);
+			}
+			if (be > e) {
+				StartQuickSort(arrTarget, s + 1, be);
+			}
+			SetArrayLocation();
+		}), delayTime, false);
+
+	//if (bs < s) {
+	//	index = bs;
+	//	currentIndex = s - 1;
+	//	GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::QuickTest, 0.5f, false, 0.5f);
+	//}
+	//if (be > e) {
+	//	index = s + 1;
+	//	currentIndex = be;
+	//	GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::QuickTest, 0.5f, false, 0.5f);
+	//}
+
+	//if (bs < s) {
+	//	StartQuickSort(arr, bs, s - 1);
+	//}
+	//if (be > e) {
+	//	StartQuickSort(arr, s + 1, be);
+	//}
+
+	//FTimerDelegate TimerDel;
+	//FTimerHandle TimerHandle;
+
+	//TimerDel.BindUFunction(this, FName("SetQuickSortColor"), arr, s, e, bs, be);
+	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.5f, false);
+}
+
+// 기본색으로 변경 후 다음 원소 비교 시작
+void ASortActor::QuickTest()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
+	SetArrTargetColor(whiteMat, bstart);
+	SetArrTargetColor(whiteMat, start);
+	StartQuickSort(arrTarget, bstart, start - 1);
+	SetArrayLocation();
+}
+
+
+// 기본색으로 변경 후 다음 원소 비교 시작
+void ASortActor::QuickTest_1()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
+	StartQuickSort(arrTarget, currentIndex + 1, tmp);
+	SetArrayLocation();
+}
+
+// 기본색으로 변경 후 다음 원소 비교 시작
+void ASortActor::SetQuickSortColor(TArray<ASortActorMesh*>& arr, int s, int e, int bs, int be)
+{
 	if (bs < s) {
 		StartQuickSort(arr, bs, s - 1);
 	}
-	if (be > e) {
+	else if (be > e) {
 		StartQuickSort(arr, s + 1, be);
 	}
-
+	SetArrayLocation();
 }
-
