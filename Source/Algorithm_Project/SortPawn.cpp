@@ -58,7 +58,7 @@ void ASortPawn::Z()
 
 void ASortPawn::X()
 {
-	sortActor->MergeSort();
+	sortActor->QuickSort();
 }
 
 void ASortPawn::C()
