@@ -327,7 +327,7 @@ void ASortActor::QuickSort()
 	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
 }
 
-// 선택 정렬 함수
+// 퀵 정렬 함수
 void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 {
 	int pivot = arr[s]->index;
@@ -345,20 +345,35 @@ void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 		if (s > e) {
 			break;
 		}
+		SetArrTargetColor(blueMat, s);
+		SetArrTargetColor(blueMat, e);
 		Swap(arr[s], arr[e]);
+
+		FTimerHandle GravityTimerHandle_0;
+		float GravityTime_0 = 0.2f;
+
+		GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle_0, FTimerDelegate::CreateLambda([&, s, e]()
+			{
+				SetArrTargetColor(whiteMat, s);
+				SetArrTargetColor(whiteMat, e);
+
+				GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle_0);
+			}), GravityTime_0, false);
+
 	}
-	
-	Swap(arr[bs], arr[s]);
+
 	SetArrTargetColor(blueMat, bs);
 	SetArrTargetColor(blueMat, s);
+	Swap(arr[bs], arr[s]);
 
-	FTimerHandle delayTimerHandle;
-	float delayTime = 0.2f;
+	FTimerHandle GravityTimerHandle;
+	float GravityTime = 0.2f;
 
-	GetWorld()->GetTimerManager().SetTimer(delayTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
+	GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
 		{
 			SetArrTargetColor(whiteMat, bs);
 			SetArrTargetColor(whiteMat, s);
+
 			if (bs < s) {
 				StartQuickSort(arrTarget, bs, s - 1);
 			}
@@ -366,31 +381,24 @@ void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 				StartQuickSort(arrTarget, s + 1, be);
 			}
 			SetArrayLocation();
-		}), delayTime, false);
+			GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle);
+		}), GravityTime, false);
 
-	//if (bs < s) {
-	//	index = bs;
-	//	currentIndex = s - 1;
-	//	GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::QuickTest, 0.5f, false, 0.5f);
-	//}
-	//if (be > e) {
-	//	index = s + 1;
-	//	currentIndex = be;
-	//	GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::QuickTest, 0.5f, false, 0.5f);
-	//}
+	//FTimerHandle delayTimerHandle;
+	//float delayTime = 0.2f;
 
-	//if (bs < s) {
-	//	StartQuickSort(arr, bs, s - 1);
-	//}
-	//if (be > e) {
-	//	StartQuickSort(arr, s + 1, be);
-	//}
-
-	//FTimerDelegate TimerDel;
-	//FTimerHandle TimerHandle;
-
-	//TimerDel.BindUFunction(this, FName("SetQuickSortColor"), arr, s, e, bs, be);
-	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.5f, false);
+	//GetWorld()->GetTimerManager().SetTimer(delayTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
+	//	{
+	//		SetArrTargetColor(whiteMat, bs);
+	//		SetArrTargetColor(whiteMat, s);
+	//		if (bs < s) {
+	//			StartQuickSort(arrTarget, bs, s - 1);
+	//		}
+	//		if (be > e) {
+	//			StartQuickSort(arrTarget, s + 1, be);
+	//		}
+	//		SetArrayLocation();
+	//	}), delayTime, false);
 }
 
 // 기본색으로 변경 후 다음 원소 비교 시작
