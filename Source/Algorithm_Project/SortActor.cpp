@@ -174,7 +174,7 @@ void ASortActor::InjectionSort()
 	}
 }
 
-// 선택 정렬 함수
+// 삽입 정렬 함수
 void ASortActor::StartInjectionSort()
 {
 	if (index > arrTarget.Num() - 1) {
@@ -219,7 +219,7 @@ void ASortActor::BubbleSort()
 	}
 }
 
-// 선택 정렬 함수
+// 버블 정렬 함수
 void ASortActor::StartBubbleSort()
 {
 	if (index >= arrTarget.Num() - 1) {
@@ -265,7 +265,7 @@ void ASortActor::MergeSort()
 	StartMergeSort(arrTarget, 0, arrTarget.Num() - 1);
 }
 
-// 선택 정렬 함수
+// 합병 정렬 함수
 void ASortActor::StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex)
 {
 	if (firstIndex < lastIndex) {
@@ -324,6 +324,9 @@ void ASortActor::Merge_Test(TArray<ASortActorMesh*>& v, int s)
 // 퀵 정렬 함수
 void ASortActor::QuickSort()
 {
+	//QuickTest();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Third"));
+
 	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
 }
 
@@ -348,76 +351,49 @@ void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 		SetArrTargetColor(blueMat, s);
 		SetArrTargetColor(blueMat, e);
 		Swap(arr[s], arr[e]);
-
-		FTimerHandle GravityTimerHandle_0;
-		float GravityTime_0 = 0.2f;
-
-		GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle_0, FTimerDelegate::CreateLambda([&, s, e]()
-			{
-				SetArrTargetColor(whiteMat, s);
-				SetArrTargetColor(whiteMat, e);
-
-				GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle_0);
-			}), GravityTime_0, false);
+		SetArrayLocation();
+		// Delay(0.1)
+		//co_await UE5Coro::Latent::Seconds(0.01);
+		SetArrTargetColor(whiteMat, s);
+		SetArrTargetColor(whiteMat, e);
 
 	}
-
-	SetArrTargetColor(blueMat, bs);
 	SetArrTargetColor(blueMat, s);
+	SetArrTargetColor(blueMat, e);
+
+	//SetArrTargetColor(blueMat, bs);
+	//SetArrTargetColor(blueMat, s);
 	Swap(arr[bs], arr[s]);
+	SetArrayLocation();
+	// Delay(0.1)
+	// co_await UE5Coro::Latent::Seconds(1);
+	SetArrTargetColor(whiteMat, s);
+	SetArrTargetColor(whiteMat, e);
 
-	FTimerHandle GravityTimerHandle;
-	float GravityTime = 0.2f;
+	//SetArrTargetColor(whiteMat, bs);
+	//SetArrTargetColor(whiteMat, s);
 
-	GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
-		{
-			SetArrTargetColor(whiteMat, bs);
-			SetArrTargetColor(whiteMat, s);
-
-			if (bs < s) {
-				StartQuickSort(arrTarget, bs, s - 1);
-			}
-			if (be > e) {
-				StartQuickSort(arrTarget, s + 1, be);
-			}
-			SetArrayLocation();
-			GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle);
-		}), GravityTime, false);
-
-	//FTimerHandle delayTimerHandle;
-	//float delayTime = 0.2f;
-
-	//GetWorld()->GetTimerManager().SetTimer(delayTimerHandle, FTimerDelegate::CreateLambda([&, bs, be, s, e]()
-	//	{
-	//		SetArrTargetColor(whiteMat, bs);
-	//		SetArrTargetColor(whiteMat, s);
-	//		if (bs < s) {
-	//			StartQuickSort(arrTarget, bs, s - 1);
-	//		}
-	//		if (be > e) {
-	//			StartQuickSort(arrTarget, s + 1, be);
-	//		}
-	//		SetArrayLocation();
-	//	}), delayTime, false);
+	if (bs < s) {
+		StartQuickSort(arrTarget, bs, s - 1);
+	}
+	if (be > e) {
+		StartQuickSort(arrTarget, s + 1, be);
+	}
 }
+
 
 // 기본색으로 변경 후 다음 원소 비교 시작
 void ASortActor::QuickTest()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
-	SetArrTargetColor(whiteMat, bstart);
-	SetArrTargetColor(whiteMat, start);
-	StartQuickSort(arrTarget, bstart, start - 1);
-	SetArrayLocation();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("First"));
+	QuickTest_1();
 }
 
 
 // 기본색으로 변경 후 다음 원소 비교 시작
 void ASortActor::QuickTest_1()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("this"));
-	StartQuickSort(arrTarget, currentIndex + 1, tmp);
-	SetArrayLocation();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Second"));
 }
 
 // 기본색으로 변경 후 다음 원소 비교 시작
