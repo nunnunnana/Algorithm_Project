@@ -353,7 +353,7 @@ void ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, int e)
 		Swap(arr[s], arr[e]);
 		SetArrayLocation();
 		// Delay(0.1)
-		//co_await UE5Coro::Latent::Seconds(0.01);
+		// co_await UE5Coro::Latent::Seconds(0.01);
 		SetArrTargetColor(whiteMat, s);
 		SetArrTargetColor(whiteMat, e);
 

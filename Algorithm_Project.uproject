@@ -29,6 +29,10 @@
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
+		},
+		{
+			"Name": "UE5Coro",
+			"Enabled": false
 		}
 	]
 }

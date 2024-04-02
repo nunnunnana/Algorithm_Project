@@ -11,6 +11,8 @@ public class Algorithm_ProjectTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.Add("Algorithm_Project");
+
+        bEnableCppCoroutinesForEvaluation = true;
     }
 }
 

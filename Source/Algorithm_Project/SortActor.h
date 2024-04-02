@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SortActorMesh.h"
-#include "UE5Coro.h"
+#include <coroutine>
 #include "Kismet/KismetArrayLibrary.h"
 #include "Components/TimeLineComponent.h"
 #include "SortActor.generated.h"
+
+namespace co = std;
 
 UCLASS()
 class ALGORITHM_PROJECT_API ASortActor : public AActor
@@ -129,13 +131,6 @@ public:
 	UFUNCTION()
 	void StartQuickSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
 
-	//UFUNCTION()
-	//FAsyncCoroutine test()
-	//{
-	//	auto Wait1 = UE5Coro::Latent::Seconds(1); // The clock starts now!
-	//	auto Wait2 = UE5Coro::Latent::Seconds(0.5); // This starts at the same time!
-	//	co_await Wait1; // Waste the remainder of that 1 second
-	//	co_await Wait2; // This is already over, it won't wait half a second
-	//}
-
+	constexpr void await_suspend(co::coroutine_handle<>) const noexcept {}
+	
 };
