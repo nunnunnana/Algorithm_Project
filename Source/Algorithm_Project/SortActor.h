@@ -24,6 +24,21 @@ public:
 	UPROPERTY(EditAnyWhere)
 	int size;
 
+	struct promise_type
+	{
+		ASortActor get_return_object() 
+		{
+			return ASortActor{ std::coroutine_handle<promise_type>::from_promise(*this) };
+		}
+		auto initial_suspend() { return std::suspend_always{}; }
+		auto final_suspend() { return std::suspend_always{}; }
+		void unhandled_exception() { std::exit(1); }
+	};
+
+	std::coroutine_handle<promise_type> co_handler;
+
+	ASortActor(std::coroutine_handle<promise_type> handler) : co_handler(handler) { }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -131,6 +146,39 @@ public:
 	UFUNCTION()
 	void StartQuickSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
 
+	UFUNCTION()
+	ASortActor Task() {
+
+
+		//co_await std::suspend_always{};
+	}
+
 	constexpr void await_suspend(co::coroutine_handle<>) const noexcept {}
-	
+
+	struct generator {
+		struct promise_type;
+		using handle = std::coroutine_handle<promise_type>;
+		struct promise_type {
+			int current_value;
+			static auto get_return_object_on_allocation_failure() { return generator{ nullptr }; }
+			auto get_return_object() { return generator{ handle::from_promise(*this) }; }
+			auto initial_suspend() { return std::suspend_always{}; }
+			auto final_suspend() noexcept { return std::suspend_always{}; }
+			void unhandled_exception() { std::terminate(); }
+			void return_void() {}
+			auto yield_value(int value) {
+				current_value = value;
+				return std::suspend_always{};
+			}
+		};
+		bool move_next() { return coro ? (coro.resume(), !coro.done()) : false; }
+		int current_value() { return coro.promise().current_value; }
+		generator(generator const&) = delete;
+		generator(generator&& rhs) : coro(rhs.coro) { rhs.coro = nullptr; }
+		~generator() { if (coro) coro.destroy(); }
+	private:
+		generator(handle h) : coro(h) {}
+		handle coro;
+	};
+
 };
