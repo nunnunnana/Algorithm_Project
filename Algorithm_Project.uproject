@@ -32,7 +32,9 @@
 		},
 		{
 			"Name": "UE5Coro",
-			"Enabled": false
+			"Enabled": true,
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
 		}
 	]
 }
