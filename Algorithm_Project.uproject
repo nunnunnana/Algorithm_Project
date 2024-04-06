@@ -29,12 +29,6 @@
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
-		},
-		{
-			"Name": "UE5Coro",
-			"Enabled": true,
-			"Type": "Runtime",
-			"LoadingPhase": "PostConfigInit"
 		}
 	]
 }

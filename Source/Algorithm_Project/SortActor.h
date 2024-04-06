@@ -5,12 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SortActorMesh.h"
-#include <experimental/coroutine>
+#include "../../Plugins/UE5Coro/Source/UE5Coro/Public/UE5Coro.h"
 #include "Kismet/KismetArrayLibrary.h"
 #include "Components/TimeLineComponent.h"
 #include "SortActor.generated.h"
 
-namespace co = std;
+using namespace UE5Coro;
 
 UCLASS()
 class ALGORITHM_PROJECT_API ASortActor : public AActor
