@@ -5,12 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SortActorMesh.h"
-#include "../../Plugins/UE5Coro/Source/UE5Coro/Public/UE5Coro.h"
+#include "UE5Coro.h"
 #include "Kismet/KismetArrayLibrary.h"
 #include "Components/TimeLineComponent.h"
 #include "SortActor.generated.h"
-
-using namespace UE5Coro;
 
 UCLASS()
 class ALGORITHM_PROJECT_API ASortActor : public AActor
@@ -68,21 +66,6 @@ protected:
 	void SetBubbleSortColor();
 
 	UFUNCTION()
-	void SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m);
-
-	UFUNCTION()
-	void SetQuickSortColor(TArray<ASortActorMesh*>& arr, int s, int e, int bs, int be);
-
-	UFUNCTION()
-	void QuickTest();
-
-	UFUNCTION()
-	void QuickTest_1();
-
-	UFUNCTION()
-	void Merge_Test(TArray<ASortActorMesh*>& v, int s);
-
-	UFUNCTION()
 	void SpawnActor(AActor* targetActor, int actorIndex);
 
 	UFUNCTION()
@@ -123,12 +106,15 @@ public:
 	void MergeSort();
 
 	UFUNCTION()
-	void StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
+	FAsyncCoroutine StartMergeSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
+
+	UFUNCTION()
+	FAsyncCoroutine SetMergeSortColor(TArray<ASortActorMesh*>& v, int s, int e, int m);
 
 	UFUNCTION()
 	void QuickSort();
 
 	UFUNCTION()
-	void StartQuickSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
+	FAsyncCoroutine StartQuickSort(TArray<ASortActorMesh*>& arr, int firstIndex, int lastIndex);
 
 };
