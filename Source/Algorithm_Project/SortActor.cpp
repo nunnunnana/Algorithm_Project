@@ -128,8 +128,8 @@ void ASortActor::StartSelectionSort()
 		tmp = index;
 		SetArrTargetColor(redMat, tmp);
 		currentIndex = index + 1;
-		// 0.02초 마다 SetSelectionSortColor 함수 실행
-		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetSelectionSortColor, 0.02f, true, 0.0f);
+		// 0.01초 마다 SetSelectionSortColor 함수 실행
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetSelectionSortColor, 0.01f, true, 0.0f);
 	}
 }
 
@@ -183,8 +183,8 @@ void ASortActor::StartInjectionSort()
 	else {
 		tmp = arrTarget[index]->index;
 		currentIndex = index - 1;
-		// 0.02초 마다 SetInjectionSortColor 함수 실행
-		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetInjectionSortColor, 0.02f, true, 0.0f);
+		// 0.01초 마다 SetInjectionSortColor 함수 실행
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetInjectionSortColor, 0.01f, true, 0.0f);
 	}
 }
 
@@ -243,8 +243,8 @@ void ASortActor::StartBubbleSort()
 				SetArrTargetColor(blueMat, currentIndex);
 				SetArrTargetColor(blueMat, tmp);
 			}
-			// 0.02초 뒤에 SetBubbleSortColor 함수 실행
-			GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.02f, false, 0.0f);
+			// 0.01초 뒤에 SetBubbleSortColor 함수 실행
+			GetWorld()->GetTimerManager().SetTimer(Timer, this, &ASortActor::SetBubbleSortColor, 0.01f, false, 0.0f);
 		}
 	}
 }
@@ -262,7 +262,11 @@ void ASortActor::SetBubbleSortColor()
 // 합병 정렬 함수
 void ASortActor::MergeSort()
 {
-	StartMergeSort(arrTarget, 0, arrTarget.Num() - 1);
+	if (IsSorting == false) {
+		Init();
+		StartMergeSort(arrTarget, 0, arrTarget.Num() - 1);
+		IsSorting = true;
+	}
 }
 
 // 합병 정렬 함수
@@ -308,12 +312,19 @@ FAsyncCoroutine ASortActor::SetMergeSortColor(TArray<ASortActorMesh*>& v, int s,
 		co_await UE5Coro::Latent::Seconds(0.01);
 		SetArrTargetColor(whiteMat, k);
 	}
+	if (s == 0 && e == (arrTarget.Num() - 1)) {
+		IsSorting = false;
+	}
 }
 
 // 퀵 정렬 함수
 void ASortActor::QuickSort()
 {
-	StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
+	if (IsSorting == false) {
+		Init();
+		StartQuickSort(arrTarget, 0, arrTarget.Num() - 1);
+		IsSorting = true;
+	}
 }
 
 // 퀵 정렬 함수
@@ -364,6 +375,9 @@ FAsyncCoroutine ASortActor::StartQuickSort(TArray<ASortActorMesh*>& arr, int s, 
 	}
 	if (be > e) {
 		co_await StartQuickSort(arrTarget, s + 1, be);
+	}
+	if (bs == 0 && be == (arrTarget.Num() - 1)) {
+		IsSorting = false;
 	}
 }
 

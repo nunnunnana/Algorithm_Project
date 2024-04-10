@@ -29,6 +29,12 @@ private:
 		UTextBlock* alertText;
 
 	UPROPERTY(meta = (BindWidget))
+		UButton* pushButton;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* popButton;
+
+	UPROPERTY(meta = (BindWidget))
 		UButton* convertButton;
 	
 	UPROPERTY(meta = (BindWidget))
@@ -58,5 +64,11 @@ public:
 
 	UFUNCTION()
 		void SetButtonText();
+
+	UFUNCTION()
+		void PressPushButton();
+
+	UFUNCTION()
+		void PressPopButton();
 
 };

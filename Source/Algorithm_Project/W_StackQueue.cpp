@@ -15,6 +15,8 @@ void UW_StackQueue::NativeConstruct()
 	//stackqueueActor = Cast(UGameplayStatics::GetActorOfClass(GetWorld(), AStackQueue::StaticClass()));
 	// 버튼 클릭시 호출될 델리게이트에 함수를 등록한다
 	convertButton->OnClicked.AddDynamic(this, &UW_StackQueue::SetButtonText);
+	pushButton->OnClicked.AddDynamic(this, &UW_StackQueue::PressPushButton);
+	popButton->OnClicked.AddDynamic(this, &UW_StackQueue::PressPopButton);
 	alertText->SetVisibility(ESlateVisibility::Hidden);
 	queuePanel->SetVisibility(ESlateVisibility::Hidden);
 }
@@ -57,5 +59,35 @@ void UW_StackQueue::SetButtonText()
 		queuePanel->SetVisibility(ESlateVisibility::Visible);
 	}
 	isQueue = !isQueue;
+}
+
+void UW_StackQueue::PressPushButton()
+{
+	if (isQueue) {
+		stackqueueActor->Enqueue();
+	}
+	else {
+		stackqueueActor->Push();
+		int index = stackqueueActor->top + 1;
+		SetIndexText(index);
+
+	}
+}
+
+void UW_StackQueue::PressPopButton()
+{
+	if (isQueue) {
+		stackqueueActor->Dequeue();
+	}
+	else {
+		stackqueueActor->Pop();
+		// Delay
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				int index = stackqueueActor->top + 1;
+				SetIndexText(index);
+			}, 0.1, false);
+	}
 }
 
