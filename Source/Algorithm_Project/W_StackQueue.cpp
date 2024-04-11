@@ -17,18 +17,18 @@ void UW_StackQueue::NativeConstruct()
 	convertButton->OnClicked.AddDynamic(this, &UW_StackQueue::SetButtonText);
 	pushButton->OnClicked.AddDynamic(this, &UW_StackQueue::PressPushButton);
 	popButton->OnClicked.AddDynamic(this, &UW_StackQueue::PressPopButton);
-	alertText->SetVisibility(ESlateVisibility::Hidden);
+	//alertPanel->SetVisibility(ESlateVisibility::Hidden);
 	queuePanel->SetVisibility(ESlateVisibility::Hidden);
 }
 void UW_StackQueue::SetAlertText(FText text)
 {
-	alertText->SetVisibility(ESlateVisibility::Visible);
+	//alertPanel->SetVisibility(ESlateVisibility::Visible);
 	alertText->SetText(text);
-
+	PlayAnimation(alertWarning);
 	// 타이머 초기화
-	GetWorld()->GetTimerManager().ClearTimer(Timer);
+	//GetWorld()->GetTimerManager().ClearTimer(Timer);
 	// 타이머 설정
-	GetWorld()->GetTimerManager().SetTimer(Timer, this, &UW_StackQueue::AdvanceTimer, 1.0f, false, 3.0f);
+	//GetWorld()->GetTimerManager().SetTimer(Timer, this, &UW_StackQueue::AdvanceTimer, 1.0f, false, 3.0f);
 
 }
 
@@ -40,7 +40,7 @@ void UW_StackQueue::SetIndexText(int index)
 
 void UW_StackQueue::AdvanceTimer()
 {
-	alertText->SetVisibility(ESlateVisibility::Hidden);
+	//alertPanel->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UW_StackQueue::SetButtonText()

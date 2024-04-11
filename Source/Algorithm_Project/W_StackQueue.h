@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <Components/Image.h>
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
@@ -27,6 +28,12 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* alertText;
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* alertPanel;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+		UWidgetAnimation* alertWarning;
 
 	UPROPERTY(meta = (BindWidget))
 		UButton* pushButton;
