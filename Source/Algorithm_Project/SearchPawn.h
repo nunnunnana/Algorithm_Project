@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasicPawn.h"
+#include "W_Search.h"
 #include "SearchPawn.generated.h"
 
 /**
@@ -17,6 +18,9 @@ class ALGORITHM_PROJECT_API ASearchPawn : public ABasicPawn
 public:
 	// Sets default values for this pawn's properties
 	ASearchPawn();
+
+	TSubclassOf<UUserWidget> searchWidgetClass;
+	UW_Search* searchWidget;
 
 protected:
 	// Called when the game starts or when spawned
