@@ -15,8 +15,9 @@ ASearch::ASearch()
 void ASearch::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
+
 
 // Called every frame
 void ASearch::Tick(float DeltaTime)
