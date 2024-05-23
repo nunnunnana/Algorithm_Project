@@ -7,7 +7,7 @@ void UW_Search::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	// GetActorOfClass로 월드에 있는 ASortActor 액터 찾기
+	// GetActorOfClass로 월드에 있는 ASearch 액터 찾기
 	AActor* FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), ASearch::StaticClass());
 	// ASortActor로 형변환
 	search = Cast<ASearch>(FoundActor);

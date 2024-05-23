@@ -24,7 +24,7 @@ public:
 private:
 
 	UPROPERTY()
-	FString selectedName = ("Selection Sort");
+	FString selectedName = ("BFS");
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* startButton;
