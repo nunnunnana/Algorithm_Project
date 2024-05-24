@@ -10,7 +10,6 @@ ASearch_Points::ASearch_Points()
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	staticMesh->SetupAttachment(RootComponent);
 
 	// 일회성 초기화 저장을 위한 구조체
 	struct FConstructorStatics
@@ -24,9 +23,17 @@ ASearch_Points::ASearch_Points()
 	static FConstructorStatics ConstructorStatics;
 	cubeMesh = ConstructorStatics.findMesh.Object;
 
+	staticMesh->SetStaticMesh(cubeMesh);
+	// Set as root component
+	RootComponent = staticMesh;
+
 	// 머티리얼 설정
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_White.M_Base_White'"));
 	currentMat = findMat.Object;
+	staticMesh->SetMaterial(0, currentMat);
+
+	// Set scale
+	SetActorScale3D(FVector(0.5f));
 
 }
 
@@ -34,8 +41,8 @@ ASearch_Points::ASearch_Points()
 void ASearch_Points::BeginPlay()
 {
 	Super::BeginPlay();
-	FVector currentLocation = this->GetActorLocation();
-	SpawnActor(currentLocation, FVector(0, 0, 1));
+	//FVector currentLocation = this->GetActorLocation();
+	//SpawnActor(currentLocation, FVector(0, 0, 0));
 
 }
 
@@ -57,5 +64,6 @@ void ASearch_Points::SpawnActor(FVector location, FVector color)
 	target->SetMobility(EComponentMobility::Movable);
 	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh);
 	target->GetStaticMeshComponent()->SetMaterial(0, currentMat);
+	target->SetActorScale3D(FVector(0.5f));
 }
 

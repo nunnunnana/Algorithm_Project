@@ -16,14 +16,26 @@ public:
 	// Sets default values for this actor's properties
 	ASearch_Points();
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* staticMesh;
 
 	UPROPERTY()
 	UStaticMesh* cubeMesh;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* currentMat;
+
+	UPROPERTY(EditAnyWhere)
+	bool isWall = false;
+
+	UPROPERTY(EditAnyWhere)
+	bool isEndpoint = false;
+
+	UPROPERTY(EditAnyWhere)
+	bool isVisited = false;
+
+	UPROPERTY(EditAnyWhere)
+	int cost = 0;
 
 protected:
 	// Called when the game starts or when spawned
