@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Search_Points.h"
+#include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 #include "Search.generated.h"
 
 UCLASS()
@@ -15,13 +18,30 @@ public:
 	// Sets default values for this actor's properties
 	ASearch();
 
+	UPROPERTY(EditAnyWhere)
+	int height = 0;
+
+	UPROPERTY(EditAnyWhere)
+	int width = 0;
+
+	UPROPERTY(EditAnyWhere)
+	int distribution = 3;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+	UPROPERTY()
+	TArray<ASearch_Points*> arrPoints;
+	UPROPERTY()
+	ASearch_Points* startPoint;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void DrawMap();
 
 	void ResetMap();
 
