@@ -42,13 +42,19 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-
+	UMaterialInstance* yellowMat;
 
 public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 	void SpawnActor(FVector location, FVector color);
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void SetVisited();
+
+	UFUNCTION()
+	void SetMaterial(UMaterialInstance* matrial);
 
 };

@@ -28,8 +28,10 @@ ASearch_Points::ASearch_Points()
 	RootComponent = staticMesh;
 
 	// 머티리얼 설정
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_White.M_Base_White'"));
-	currentMat = findMat.Object;
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> white(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_White.M_Base_White'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> yellow(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_Yellow.M_Base_Yellow'"));
+	currentMat = white.Object;
+	yellowMat = yellow.Object;
 	staticMesh->SetMaterial(0, currentMat);
 
 	// Set scale
@@ -65,5 +67,17 @@ void ASearch_Points::SpawnActor(FVector location, FVector color)
 	target->GetStaticMeshComponent()->SetStaticMesh(cubeMesh);
 	target->GetStaticMeshComponent()->SetMaterial(0, currentMat);
 	target->SetActorScale3D(FVector(0.5f));
+}
+
+void ASearch_Points::SetVisited()
+{
+	isVisited = true;
+	SetMaterial(yellowMat);
+
+}
+
+void ASearch_Points::SetMaterial(UMaterialInstance* matrial)
+{
+	staticMesh->SetMaterial(0, matrial);
 }
 
