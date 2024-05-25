@@ -24,7 +24,7 @@ void UW_Search::StartSearch()
 	if (selectedName == ("BFS"))
 		search->StartBFS();
 	else if (selectedName == ("DFS"))
-		search->StartDFS();
+		search->StartDFS(nullptr);
 	else if (selectedName == ("Dijkstra"))
 		search->StartDijkstra();
 	else if (selectedName == ("A*"))
