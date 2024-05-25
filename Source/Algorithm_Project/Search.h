@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Search_Points.h"
+#include "UE5Coro.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
 #include "Search.generated.h"
@@ -17,6 +18,8 @@ class ALGORITHM_PROJECT_API ASearch : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASearch();
+
+	TArray<int32> IntArray;
 
 	UPROPERTY(EditAnyWhere)
 	int height = 0;
@@ -34,8 +37,32 @@ protected:
 private:
 	UPROPERTY()
 	TArray<ASearch_Points*> arrPoints;
+
+	UPROPERTY()
+	TArray<ASearch_Points*> arrCurrentCell;
+
+	UPROPERTY()
+	TArray<ASearch_Points*> arrNeighborCell;
+
+	UPROPERTY()
+	TArray<ASearch_Points*> arrTotalCell;
+
 	UPROPERTY()
 	ASearch_Points* startPoint;
+
+	UPROPERTY()
+	ASearch_Points* endPoint;
+
+	UPROPERTY()
+	ASearch_Points* currentCell;
+
+	UPROPERTY()
+	ASearch_Points* nextCell;
+
+	UPROPERTY()
+	UMaterialInstance* greenMat;
+
+	bool isfindEndPoint = false;
 
 public:	
 	// Called every frame
@@ -49,7 +76,7 @@ public:
 	void StartBFS();
 
 	UFUNCTION()
-	void StartDFS();
+	FAsyncCoroutine StartDFS(ASearch_Points* point);
 
 	UFUNCTION()
 	void StartDijkstra();
@@ -59,5 +86,8 @@ public:
 
 	UFUNCTION()
 	void SetCostVisibility();
+
+	UFUNCTION()
+	void FindNeighborCell();
 
 };
