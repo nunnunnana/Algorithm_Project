@@ -10,6 +10,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Search.generated.h"
 
+DECLARE_DELEGATE(FDele_OnDestinationReached);
+DECLARE_DELEGATE(FDele_OnDestinationUnreached);
+
 UCLASS()
 class ALGORITHM_PROJECT_API ASearch : public AActor
 {
@@ -18,6 +21,9 @@ class ALGORITHM_PROJECT_API ASearch : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASearch();
+
+	FDele_OnDestinationReached OnDestinationReached;
+	FDele_OnDestinationUnreached OnDestinationUnreached;
 
 	TArray<int32> IntArray;
 
@@ -35,6 +41,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+
+
 	UPROPERTY()
 	TArray<ASearch_Points*> arrPoints;
 

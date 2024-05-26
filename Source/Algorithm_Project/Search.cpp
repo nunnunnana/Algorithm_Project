@@ -16,18 +16,6 @@ ASearch::ASearch()
 void ASearch::BeginPlay()
 {
 	Super::BeginPlay();
-	//IntArray = { 10 };
-	//IntArray.RemoveAt(0);
-	//if (IntArray.IsEmpty() == true) {
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NULL"));
-	//}
-	//else {
-	//	for (int32 arr : IntArray)
-	//	{
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), arr));
-	//	}
-	//}
-
 	DrawMap();
 }
 
@@ -136,18 +124,23 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 				arr->SetMaterial(greenMat);
 			}
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Destination reached"));
+		OnDestinationReached.Execute();
 	}
 	else {
-		if (arrNeighborCell.Num() == 0) {
-			arrCurrentCell.RemoveAt(arrCurrentCell.Num() - 1);
-			if (arrCurrentCell.IsEmpty() != true) {
-				nextCell = arrCurrentCell.Last();
-				nextCell->SetVisited();
-				StartDFS(nextCell);
+		if (arrNeighborCell.IsEmpty() == true) {
+			if (arrCurrentCell.IsEmpty() == true) {
+				OnDestinationUnreached.Execute();
 			}
 			else {
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Destination unreached"));
+				arrCurrentCell.RemoveAt(arrCurrentCell.Num() - 1);
+				if (arrCurrentCell.IsEmpty() != true) {
+					nextCell = arrCurrentCell.Last();
+					nextCell->SetVisited();
+					StartDFS(nextCell);
+				}
+				else {
+					OnDestinationUnreached.Execute();
+				}
 			}
 		}
 		else {
