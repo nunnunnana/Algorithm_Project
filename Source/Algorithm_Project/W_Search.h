@@ -7,6 +7,7 @@
 #include "Search.h"
 #include "Components/Button.h"
 #include "Components/ComboBoxString.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "W_Search.generated.h"
 
@@ -34,8 +35,22 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UComboBoxString* searchComboBox;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* alertText;
+
 	UPROPERTY(EditAnyWhere)
 	ASearch* search;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* alertWarning;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* alertSuccess;
+
+	UFUNCTION()
+	void CallDeleFunc_OnDestinationReached();
+	UFUNCTION()
+	void CallDeleFunc_OnDestinationUnreached();
 
 public:
 	UFUNCTION()
@@ -46,4 +61,10 @@ public:
 
 	UFUNCTION()
 	void SelectedChange(FString selectedItem, ESelectInfo::Type selectionType);
+
+	UFUNCTION()
+	void ActivateWarning();
+
+	UFUNCTION()
+	void ActivateSuccess();
 };
