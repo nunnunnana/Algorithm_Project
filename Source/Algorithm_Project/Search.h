@@ -40,6 +40,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FTimerHandle bfsTimer;
+
 private:
 
 
@@ -76,12 +78,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
 	void DrawMap();
 
+	UFUNCTION()
 	void ResetMap();
 
 	UFUNCTION()
 	void StartBFS();
+
+	UFUNCTION()
+	void BFS();
 
 	UFUNCTION()
 	FAsyncCoroutine StartDFS(ASearch_Points* point);

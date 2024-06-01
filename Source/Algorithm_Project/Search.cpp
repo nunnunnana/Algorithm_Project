@@ -89,20 +89,71 @@ void ASearch::ResetMap()
 
 void ASearch::StartBFS()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StartBFS"));
+	// 기준이 되는 point 설정
 	currentCell = startPoint;
 	arrNeighborCell.Empty();
 	arrCurrentCell.Add(currentCell);
+	// 0.1초 마다 SetSelectionSortColor 함수 실행
+	GetWorld()->GetTimerManager().SetTimer(bfsTimer, this, &ASearch::BFS, 0.1f, true, 0.0f);
+}
+
+void ASearch::BFS()
+{
+	if (arrCurrentCell.IsEmpty() != true) {
+		// arrCurrentCell의 첫 번째 인덱스를 기준으로 설정하고 첫 번째 인덱스 제거
+		currentCell = arrCurrentCell[0];
+		arrCurrentCell.RemoveAt(0);
+		FindNeighborCell();
+
+		// CellArray에 End point 있는지 확인
+		for (ASearch_Points* arr : arrNeighborCell)
+		{
+			if (arr->isEndpoint == true) {
+				isfindEndPoint = true;
+			}
+			else {
+				arr->SetVisited();
+				arrCurrentCell.Add(arr);
+				arrTotalCell.Add(arr);
+			}
+		}
+
+		// EntPoint에 도달했으면 방문했던 Cell의 색상 변경
+		if (isfindEndPoint == true) {
+			for (ASearch_Points* arr : arrTotalCell)
+			{
+				if (arr->isVisited == true) {
+					arr->SetMaterial(greenMat);
+				}
+			}
+			arrTotalCell.Empty();
+			GetWorld()->GetTimerManager().ClearTimer(bfsTimer);
+			OnDestinationReached.Execute();
+		}
+		else {
+			// 근처 Cell 탐색해서 담은 배열 초기화
+			arrNeighborCell.Empty();
+		}
+
+	}
+	else {
+		// EndPoint를 못찾았을 때
+		GetWorld()->GetTimerManager().ClearTimer(bfsTimer);
+		arrTotalCell.Empty();
+		OnDestinationUnreached.Execute();
+	}
 }
 
 FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 {
+	// 기준이 되는 point 설정
 	if (point != nullptr) {
 		currentCell = point;
 	}
 	else {
 		currentCell = startPoint;
 	}
+
 	arrNeighborCell.Empty();
 	FindNeighborCell();
 
@@ -117,6 +168,7 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		}
 	}
 
+	// EntPoint에 도달했으면 방문했던 Cell의 색상 변경
 	if (isfindEndPoint == true) {
 		for (ASearch_Points* arr : arrCurrentCell)
 		{
@@ -126,6 +178,9 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		}
 		OnDestinationReached.Execute();
 	}
+
+	// 상하좌우 중 Cell이 있으면 랜덤으로 하나 정해서 Next Cell 설정 후 색상 변경 
+	// 만약 Cell 이 없으면 ArrCurrentCell 마지막 인덱스 - 1 을 Next Cell 로 설정 후 함수 호출
 	else {
 		if (arrNeighborCell.IsEmpty() == true) {
 			if (arrCurrentCell.IsEmpty() == true) {
