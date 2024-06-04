@@ -100,7 +100,7 @@ public:
 	void StartAstar();
 
 	UFUNCTION()
-	void SetCostVisibility();
+	void SetAllCostVisibility();
 
 	UFUNCTION()
 	void FindNeighborCell();

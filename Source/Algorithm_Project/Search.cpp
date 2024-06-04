@@ -134,7 +134,7 @@ void ASearch::BFS()
 			// 근처 Cell 탐색해서 담은 배열 초기화
 			arrNeighborCell.Empty();
 		}
-
+		
 	}
 	else {
 		// EndPoint를 못찾았을 때
@@ -218,9 +218,11 @@ void ASearch::StartAstar()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StartAstar"));
 }
 
-void ASearch::SetCostVisibility()
+void ASearch::SetAllCostVisibility()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SetCostVisibility"));
+	for (ASearch_Points* arr : arrPoints) {
+		arr->SetCostVisibility(true);
+	}
 }
 
 // 근처 Cell 탐색
