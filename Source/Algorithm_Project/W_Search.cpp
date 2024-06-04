@@ -42,8 +42,10 @@ void UW_Search::StartSearch()
 		search->StartBFS();
 	else if (selectedName == ("DFS"))
 		search->StartDFS(nullptr);
-	else if (selectedName == ("Dijkstra"))
+	else if (selectedName == ("Dijkstra")) {
 		search->StartDijkstra();
+		search->SetAllCostVisibility();
+	}
 	else if (selectedName == ("A*"))
 		search->StartAstar();
 }
