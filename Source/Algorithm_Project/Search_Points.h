@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Engine/Classes/Components/TextRenderComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Search_Points.generated.h"
 
@@ -18,6 +19,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* staticMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UTextRenderComponent* costText;
 
 	UPROPERTY()
 	UStaticMesh* cubeMesh;
@@ -56,5 +60,8 @@ public:
 
 	UFUNCTION()
 	void SetMaterial(UMaterialInstance* matrial);
+
+	UFUNCTION()
+	void SetCostVisibility(bool isVisibility);
 
 };
