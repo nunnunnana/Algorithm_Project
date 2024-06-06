@@ -201,7 +201,7 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		else {
 			nextCell = arrNeighborCell[FMath::RandRange(0, arrNeighborCell.Num() - 1)];
 			nextCell->SetVisited();
-			// Delay(0.01)
+			// Delay(0.1)
 			co_await UE5Coro::Latent::Seconds(0.1);
 			StartDFS(nextCell);
 		}
@@ -210,7 +210,53 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 
 void ASearch::StartDijkstra()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StartDijkstra"));
+	// 기준이 되는 point 설정
+	currentCell = startPoint;
+	arrNeighborCell.Empty();
+	arrCurrentCell.Add(currentCell);
+	dijkstraCost = 0;
+	Research();
+}
+
+FAsyncCoroutine ASearch::Research()
+{
+	for (ASearch_Points* arr : arrCurrentCell) {
+		currentCell = arr;
+		FindNeighborCell();
+	}
+	// EndPoint를 못찾았을 때
+	if (arrNeighborCell.IsEmpty()) {
+		arrCurrentCell.Empty();
+		arrNeighborCell.Empty();
+		OnDestinationUnreached.Execute();
+	}
+	// CellArray에 End point 있는지 확인
+	else {
+		dijkstraCost++;
+		for (ASearch_Points* arr : arrNeighborCell) {
+			if (arr->isEndpoint) {
+				isfindEndPoint = true;
+				arr->cost = dijkstraCost;
+				endPoint = arr;
+			}
+			else {
+				arr->SetVisited();
+				arr->cost = dijkstraCost;
+				arrCurrentCell.Add(arr);
+			}
+		}
+		// EndPoint 찾았는지 조건 확인
+		if (isfindEndPoint == true) {
+			currentCell = endPoint;
+			FindNeighborCell_IngnoreVisited();
+		}
+		else {
+			arrNeighborCell.Empty();
+			// Delay(0.2)
+			co_await UE5Coro::Latent::Seconds(0.2);
+			Research();
+		}
+	}
 }
 
 void ASearch::StartAstar()
@@ -257,3 +303,53 @@ void ASearch::FindNeighborCell()
 	}
 }
 
+// Visited 조건 확인 안하고 근처 Cell 탐색
+void ASearch::FindNeighborCell_IngnoreVisited()
+{
+	for (ASearch_Points* arr : arrPoints)
+	{
+		if (arr->isWall != true) {
+			float arrX = arr->GetActorLocation().X;
+			float arrY = arr->GetActorLocation().Y;
+
+			float currentX = currentCell->GetActorLocation().X;
+			float currentY = currentCell->GetActorLocation().Y;
+
+			// 왼쪽 확인
+			if (arrX == (currentX - 100.0) && arrY == currentY) {
+				arrNeighborCell.Add(arr);
+			}
+			// 오른쪽 확인
+			else if (arrX == (currentX + 100.0) && arrY == currentY) {
+				arrNeighborCell.Add(arr);
+			}
+			// 위쪽 확인
+			else if (arrX == currentX && arrY == (currentY + 100.0)) {
+				arrNeighborCell.Add(arr);
+			}
+			// 아래쪽 확인
+			else if (arrX == currentX && arrY == (currentY - 100.0)) {
+				arrNeighborCell.Add(arr);
+			}
+		}
+	}
+	for (ASearch_Points* arr : arrNeighborCell)
+	{
+		if (arr->cost == (dijkstraCost - 1)) {
+			currentCell = arr;
+		}
+	}
+	// 초기 지점으로 돌아왔으면 탐색 성공 표시
+	if (dijkstraCost == 1) {
+		arrCurrentCell.Empty();
+		arrNeighborCell.Empty();
+		OnDestinationReached.Execute();
+	}
+	// cost에 -1하면서 색상 변경 후 함수 호출
+	else {
+		dijkstraCost--;
+		arrNeighborCell.Empty();
+		currentCell->SetMaterial(greenMat);
+		FindNeighborCell_IngnoreVisited();
+	}
+}

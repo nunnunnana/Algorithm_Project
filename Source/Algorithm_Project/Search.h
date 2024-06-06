@@ -74,6 +74,8 @@ private:
 
 	bool isfindEndPoint = false;
 
+	int dijkstraCost = 0;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -100,9 +102,15 @@ public:
 	void StartAstar();
 
 	UFUNCTION()
+	FAsyncCoroutine Research();
+
+	UFUNCTION()
 	void SetAllCostVisibility();
 
 	UFUNCTION()
 	void FindNeighborCell();
+
+	UFUNCTION()
+	void FindNeighborCell_IngnoreVisited();
 
 };
