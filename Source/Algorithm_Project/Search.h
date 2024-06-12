@@ -105,7 +105,10 @@ public:
 	FAsyncCoroutine Research();
 
 	UFUNCTION()
-	void SetAllCostVisibility();
+	void ActivateDijkstra();
+
+	UFUNCTION()
+	void ActivateAStar();
 
 	UFUNCTION()
 	void FindNeighborCell();

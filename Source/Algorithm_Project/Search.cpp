@@ -264,10 +264,19 @@ void ASearch::StartAstar()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StartAstar"));
 }
 
-void ASearch::SetAllCostVisibility()
+// Activate dijkstra cost
+void ASearch::ActivateDijkstra()
 {
 	for (ASearch_Points* arr : arrPoints) {
-		arr->SetCostVisibility(true);
+		arr->SetDijkstra();
+	}
+}
+
+// Activate a star distance value
+void ASearch::ActivateAStar()
+{
+	for (ASearch_Points* arr : arrPoints) {
+		arr->SetAStar();
 	}
 }
 
