@@ -41,6 +41,15 @@ public:
 	UPROPERTY(EditAnyWhere)
 	int cost = 0;
 
+	UPROPERTY(EditAnyWhere)
+	float g = 0;
+
+	UPROPERTY(EditAnyWhere)
+	float h = 0;
+
+	UPROPERTY(EditAnyWhere)
+	bool isAstar = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -63,5 +72,11 @@ public:
 
 	UFUNCTION()
 	void SetCostVisibility(bool isVisibility);
+
+	UFUNCTION()
+	void SetDijkstra();
+
+	UFUNCTION()
+	void SetAStar();
 
 };

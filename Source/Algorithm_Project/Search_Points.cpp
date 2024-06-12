@@ -44,7 +44,7 @@ ASearch_Points::ASearch_Points()
 	costText->SetWorldSize(100.0f);
 	costText->SetTextRenderColor(FColor::Black);
 	costText->SetHorizontalAlignment(EHTA_Center);
-	costText->SetRelativeLocationAndRotation(FVector(0, 0, 90), FQuat(90.f, 0.f, 179.f, 0.f));
+	costText->SetRelativeLocationAndRotation(FVector(0, 0, 100), FQuat(90.f, 0.f, 179.f, 0.f));
 
 }
 
@@ -63,8 +63,16 @@ void ASearch_Points::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FString costString = FString::FromInt(cost);
-	costText->SetText(FText::FromString(costString));
+	// cost 값 텍스트에 적용
+	if (isAstar == true) {
+		int costRequired = g / 100;
+		int estimatedCost = h / 100;
+		costText->SetText(FText::Format(FText::FromString("G:{G} H:{H}"), costRequired, estimatedCost));
+	}
+	else {
+		FString costString = FString::FromInt(cost);
+		costText->SetText(FText::FromString(costString));
+	}
 }
 
 
@@ -96,5 +104,19 @@ void ASearch_Points::SetMaterial(UMaterialInstance* matrial)
 void ASearch_Points::SetCostVisibility(bool isVisibility)
 {
 	costText->SetVisibility(isVisibility);
+}
+
+void ASearch_Points::SetDijkstra()
+{
+	isAstar = false;
+	SetCostVisibility(true);
+	costText->SetWorldSize(100.0f);
+}
+
+void ASearch_Points::SetAStar()
+{
+	isAstar = true;
+	SetCostVisibility(true);
+	costText->SetWorldSize(50.0f);
 }
 
