@@ -103,7 +103,13 @@ void ASearch::BFS()
 		// arrCurrentCell의 첫 번째 인덱스를 기준으로 설정하고 첫 번째 인덱스 제거
 		currentCell = arrCurrentCell[0];
 		arrCurrentCell.RemoveAt(0);
-		FindNeighborCell();
+
+		for (ASearch_Points* arr : arrPoints)
+		{
+			if (arr->isWall != true && arr->isVisited != true) {
+				FindNeighborCell(arr);
+			}
+		}
 
 		// CellArray에 End point 있는지 확인
 		for (ASearch_Points* arr : arrNeighborCell)
@@ -155,7 +161,13 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 	}
 
 	arrNeighborCell.Empty();
-	FindNeighborCell();
+
+	for (ASearch_Points* arr : arrPoints)
+	{
+		if (arr->isWall != true && arr->isVisited != true) {
+			FindNeighborCell(arr);
+		}
+	}
 
 	// CellArray에 End point 있는지 확인
 	for (ASearch_Points* arr : arrNeighborCell)
@@ -222,7 +234,12 @@ FAsyncCoroutine ASearch::Research()
 {
 	for (ASearch_Points* arr : arrCurrentCell) {
 		currentCell = arr;
-		FindNeighborCell();
+		for (ASearch_Points* arrCell : arrPoints)
+		{
+			if (arrCell->isWall != true && arrCell->isVisited != true) {
+				FindNeighborCell(arrCell);
+			}
+		}
 	}
 	// EndPoint를 못찾았을 때
 	if (arrNeighborCell.IsEmpty()) {
@@ -248,7 +265,7 @@ FAsyncCoroutine ASearch::Research()
 		// EndPoint 찾았는지 조건 확인
 		if (isfindEndPoint == true) {
 			currentCell = endPoint;
-			FindNeighborCell_IngnoreVisited();
+			ReturnToStartPoint();
 		}
 		else {
 			arrNeighborCell.Empty();
@@ -281,65 +298,40 @@ void ASearch::ActivateAStar()
 }
 
 // 근처 Cell 탐색
-void ASearch::FindNeighborCell()
+void ASearch::FindNeighborCell(ASearch_Points* point)
 {
-	for (ASearch_Points* arr : arrPoints)
-	{
-		if (arr->isWall != true && arr->isVisited != true) {
-			float arrX = arr->GetActorLocation().X;
-			float arrY = arr->GetActorLocation().Y;
+	float pointX = point->GetActorLocation().X;
+	float pointY = point->GetActorLocation().Y;
 
-			float currentX = currentCell->GetActorLocation().X;
-			float currentY = currentCell->GetActorLocation().Y;
+	float currentX = currentCell->GetActorLocation().X;
+	float currentY = currentCell->GetActorLocation().Y;
 
-			// 왼쪽 확인
-			if (arrX == (currentX - 100.0) && arrY == currentY) {
-				arrNeighborCell.Add(arr);
-			}
-			// 오른쪽 확인
-			else if (arrX == (currentX + 100.0) && arrY == currentY) {
-				arrNeighborCell.Add(arr);
-			}
-			// 위쪽 확인
-			else if (arrX == currentX && arrY == (currentY + 100.0)) {
-				arrNeighborCell.Add(arr);
-			}
-			// 아래쪽 확인
-			else if (arrX == currentX && arrY == (currentY - 100.0)) {
-				arrNeighborCell.Add(arr);
-			}
-		}
+	// 왼쪽 확인
+	if (pointX == (currentX - 100.0) && pointY == currentY) {
+		arrNeighborCell.Add(point);
+	}
+	// 오른쪽 확인
+	else if (pointX == (currentX + 100.0) && pointY == currentY) {
+		arrNeighborCell.Add(point);
+	}
+	// 위쪽 확인
+	else if (pointX == currentX && pointY == (currentY + 100.0)) {
+		arrNeighborCell.Add(point);
+	}
+	// 아래쪽 확인
+	else if (pointX == currentX && pointY == (currentY - 100.0)) {
+		arrNeighborCell.Add(point);
 	}
 }
 
-// Visited 조건 확인 안하고 근처 Cell 탐색
-void ASearch::FindNeighborCell_IngnoreVisited()
+// 시작지점으로 돌아가기
+void ASearch::ReturnToStartPoint()
 {
 	for (ASearch_Points* arr : arrPoints)
 	{
+		// Visited 조건 확인 안하고 근처 Cell 탐색
 		if (arr->isWall != true) {
-			float arrX = arr->GetActorLocation().X;
-			float arrY = arr->GetActorLocation().Y;
-
-			float currentX = currentCell->GetActorLocation().X;
-			float currentY = currentCell->GetActorLocation().Y;
-
-			// 왼쪽 확인
-			if (arrX == (currentX - 100.0) && arrY == currentY) {
-				arrNeighborCell.Add(arr);
-			}
-			// 오른쪽 확인
-			else if (arrX == (currentX + 100.0) && arrY == currentY) {
-				arrNeighborCell.Add(arr);
-			}
-			// 위쪽 확인
-			else if (arrX == currentX && arrY == (currentY + 100.0)) {
-				arrNeighborCell.Add(arr);
-			}
-			// 아래쪽 확인
-			else if (arrX == currentX && arrY == (currentY - 100.0)) {
-				arrNeighborCell.Add(arr);
-			}
+			FindNeighborCell(arr);
 		}
 	}
 	for (ASearch_Points* arr : arrNeighborCell)
@@ -359,6 +351,6 @@ void ASearch::FindNeighborCell_IngnoreVisited()
 		dijkstraCost--;
 		arrNeighborCell.Empty();
 		currentCell->SetMaterial(greenMat);
-		FindNeighborCell_IngnoreVisited();
+		ReturnToStartPoint();
 	}
 }

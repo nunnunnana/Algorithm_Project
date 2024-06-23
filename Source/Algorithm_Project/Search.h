@@ -111,9 +111,9 @@ public:
 	void ActivateAStar();
 
 	UFUNCTION()
-	void FindNeighborCell();
+	void FindNeighborCell(ASearch_Points* point);
 
 	UFUNCTION()
-	void FindNeighborCell_IngnoreVisited();
+	void ReturnToStartPoint();
 
 };
