@@ -47,7 +47,7 @@ void UW_Search::StartSearch()
 		search->ActivateDijkstra();
 	}
 	else if (selectedName == ("A*")) {
-		search->StartAstar();
+		search->StartAstar(nullptr);
 		search->ActivateAStar();
 	}
 }
