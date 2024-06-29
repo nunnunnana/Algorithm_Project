@@ -58,6 +58,9 @@ private:
 	TArray<ASearch_Points*> arrTotalCell;
 
 	UPROPERTY()
+	TArray<ASearch_Points*> arrCloseCell;
+
+	UPROPERTY()
 	ASearch_Points* startPoint;
 
 	UPROPERTY()
@@ -71,6 +74,9 @@ private:
 
 	UPROPERTY()
 	UMaterialInstance* greenMat;
+
+	UPROPERTY()
+	UMaterialInstance* lightblueMat;
 
 	bool isfindEndPoint = false;
 
@@ -99,7 +105,7 @@ public:
 	void StartDijkstra();
 
 	UFUNCTION()
-	void StartAstar();
+	FAsyncCoroutine StartAstar(ASearch_Points* point);
 
 	UFUNCTION()
 	FAsyncCoroutine Research();
@@ -115,5 +121,11 @@ public:
 
 	UFUNCTION()
 	void ReturnToStartPoint();
+
+	UFUNCTION()
+	float CalcManhattanDistance(ASearch_Points* currentPoint, ASearch_Points* targetPoint);
+
+	UFUNCTION()
+	void CompareNextCell(ASearch_Points* currentPoint, ASearch_Points* targetPoint);
 
 };

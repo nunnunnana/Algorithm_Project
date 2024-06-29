@@ -8,8 +8,11 @@ ASearch::ASearch()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_Green.M_Base_Green'"));
-	greenMat = findMat.Object;
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findGreenMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_Green.M_Base_Green'"));
+	greenMat = findGreenMat.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> findLightBlueMat(TEXT("/Script/Engine.Material'/Game/Asset/Material/M_Base_LightBlue.M_Base_LightBlue'"));
+	lightblueMat = findLightBlueMat.Object;
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +42,8 @@ void ASearch::DrawMap()
 				FRotator rotation(0, 0, 0);
 				FActorSpawnParameters SpawnParams;
 				ASearch_Points* end = (ASearch_Points*)GetWorld()->SpawnActor<ASearch_Points>(GenerateBP, location, rotation, SpawnParams);
-				arrPoints.Add(end);
+				endPoint = end;
+				arrPoints.Add(endPoint);
 			}
 			else if(j == 0 && i == 0) {
 				// spawn start point
@@ -276,9 +280,91 @@ FAsyncCoroutine ASearch::Research()
 	}
 }
 
-void ASearch::StartAstar()
+FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StartAstar"));
+	// 기준이 되는 point 설정
+	if (point != nullptr) {
+		currentCell = point;
+	}
+	else {
+		currentCell = startPoint;
+		arrCloseCell.Empty();
+		endPoint->g = CalcManhattanDistance(endPoint, startPoint);
+	}
+
+	arrNeighborCell.Empty();
+	nextCell = nullptr;
+
+	for (ASearch_Points* arr : arrPoints)
+	{
+		if (arr->isWall != true && arr->isVisited != true) {
+			FindNeighborCell(arr);
+		}
+	}
+
+	// CellArray에 End point 있는지 확인
+	for (ASearch_Points* arr : arrNeighborCell)
+	{
+		if (arr->isEndpoint == true) {
+			isfindEndPoint = true;
+		}
+		else {
+			arr->SetVisited();
+			arr->h = CalcManhattanDistance(arr, endPoint);
+			arr->g = CalcManhattanDistance(arr, startPoint);
+			arrCurrentCell.Add(arr);
+		}
+	}
+
+	// 현재 Cell과 거리 비교해서 Next Cell 설정
+	for (ASearch_Points* arr : arrCurrentCell)
+	{
+		CompareNextCell(arr, currentCell);
+	}
+
+	// arrCurrentCell 배열에서 기준 노드 제거 후 배열이 비어있는지 확인
+	arrCloseCell.Add(currentCell);
+	arrCurrentCell.Remove(currentCell);
+
+	// arrCurrentCell에서 EndPoint를 못찾았을 때
+	if (arrCurrentCell.IsEmpty()) {
+		arrNeighborCell.Empty();
+		nextCell = nullptr;
+		OnDestinationUnreached.Execute();
+	}
+	else {
+		// EndPoint를 찾았을 때
+		if (isfindEndPoint) {
+			arrNeighborCell.Empty();
+			currentCell = endPoint;
+			OnDestinationReached.Execute();
+		}
+
+		// Next Cell이 설정돼었는지 확인 후 없으면 arrCurrentCell 배열에서 Next Cell 설정
+		else {
+			if (nextCell != nullptr) {
+				// Delay(0.2)
+				co_await UE5Coro::Latent::Seconds(0.2);
+				nextCell->SetMaterial(lightblueMat);
+				StartAstar(nextCell);
+			}
+			else {
+				for (int index = 0; index != arrCurrentCell.Num(); index++)
+				{
+					if (index == 0) {
+						nextCell = arrCurrentCell[0];
+					}
+					else {
+						CompareNextCell(arrCurrentCell[index], nextCell);
+					}
+				}
+				// Delay(0.2)
+				co_await UE5Coro::Latent::Seconds(0.2);
+				nextCell->SetMaterial(lightblueMat);
+				StartAstar(nextCell);
+			}
+		}
+	}
 }
 
 // Activate dijkstra cost
@@ -352,5 +438,33 @@ void ASearch::ReturnToStartPoint()
 		arrNeighborCell.Empty();
 		currentCell->SetMaterial(greenMat);
 		ReturnToStartPoint();
+	}
+}
+
+// 두 지점의 맨해튼 거리 계산
+float ASearch::CalcManhattanDistance(ASearch_Points* currentPoint, ASearch_Points* targetPoint)
+{
+	float result = 0.0f;
+	float currentX = currentPoint->GetActorLocation().X;
+	float currentY = currentPoint->GetActorLocation().Y;
+
+	float targetX = targetPoint->GetActorLocation().X;
+	float targetY = targetPoint->GetActorLocation().Y;
+
+	result = (currentX - targetX) + (currentY - targetY);
+
+	return abs(result);
+}
+
+// 두 Cell의 거리 비교 후 Next Cell 설정
+void ASearch::CompareNextCell(ASearch_Points* targetPoint, ASearch_Points* currentPoint)
+{
+	if ((targetPoint->g + targetPoint->h) > (currentPoint->g + currentPoint->h)) {
+		nextCell = targetPoint;
+	}
+	else if ((targetPoint->g + targetPoint->h) == (currentPoint->g + currentPoint->h)) {
+		if (targetPoint->g > currentPoint->g) {
+			nextCell = targetPoint;
+		}
 	}
 }
