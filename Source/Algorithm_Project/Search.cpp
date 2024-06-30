@@ -337,7 +337,8 @@ FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 		if (isfindEndPoint) {
 			arrNeighborCell.Empty();
 			currentCell = endPoint;
-			OnDestinationReached.Execute();
+			arrCloseCell.Append(arrCurrentCell);
+			BackTracking();
 		}
 
 		// Next Cell이 설정돼었는지 확인 후 없으면 arrCurrentCell 배열에서 Next Cell 설정
@@ -383,7 +384,7 @@ void ASearch::ActivateAStar()
 	}
 }
 
-// 근처 Cell 탐색
+// 현재 셀의 이웃 셀들을 찾는 함수
 void ASearch::FindNeighborCell(ASearch_Points* point)
 {
 	float pointX = point->GetActorLocation().X;
@@ -441,7 +442,7 @@ void ASearch::ReturnToStartPoint()
 	}
 }
 
-// 두 지점의 맨해튼 거리 계산
+// 두 지점 사이의 맨해튼 거리를 계산하는 함수
 float ASearch::CalcManhattanDistance(ASearch_Points* currentPoint, ASearch_Points* targetPoint)
 {
 	float result = 0.0f;
@@ -466,5 +467,41 @@ void ASearch::CompareNextCell(ASearch_Points* targetPoint, ASearch_Points* curre
 		if (targetPoint->g > currentPoint->g) {
 			nextCell = targetPoint;
 		}
+	}
+}
+
+// 목적지에 도달했을 때 경로를 추적하는 함수
+void ASearch::BackTracking()
+{
+	for (ASearch_Points* arr : arrCloseCell)
+	{
+		FindNeighborCell(arr);
+	}
+
+	// Current Cell 설정
+	for (int index = 0; index != arrNeighborCell.Num(); index++)
+	{
+		if (index == 0) {
+			currentCell = arrNeighborCell[0];
+		}
+		else {
+			if (arrNeighborCell[index]->h > currentCell->h) {
+				currentCell = arrNeighborCell[index];
+			}
+			else if (arrNeighborCell[index]->g == (currentCell->g - 100)) {
+				currentCell = arrNeighborCell[index];
+			}
+		}
+	}
+
+	// 시작점까지 도착하면 종료
+	arrNeighborCell.Empty();
+	currentCell->SetMaterial(greenMat);
+	if (currentCell->g == 100) {
+		OnDestinationReached.Execute();
+	}
+	else {
+		arrCloseCell.Remove(currentCell);
+		BackTracking();
 	}
 }

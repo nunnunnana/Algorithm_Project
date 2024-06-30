@@ -128,4 +128,7 @@ public:
 	UFUNCTION()
 	void CompareNextCell(ASearch_Points* currentPoint, ASearch_Points* targetPoint);
 
+	UFUNCTION()
+	void BackTracking();
+
 };
