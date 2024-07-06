@@ -23,38 +23,54 @@ void UW_Search::NativeConstruct()
 
 }
 
+// 성공 델리게이트 함수 실행
 void UW_Search::CallDeleFunc_OnDestinationReached()
 {
 	alertText->SetText(FText::FromString("Target reached"));
 	ActivateSuccess();
+	isStarted = false;
 }
 
+// 실패 델리게이트 함수 실행
 void UW_Search::CallDeleFunc_OnDestinationUnreached()
 {
 	alertText->SetText(FText::FromString("Unable to connect to destination"));
 	ActivateWarning();
+	isStarted = false;
 }
 
 // 선택한 ComboBox에 맞는 알고리즘 실행
 void UW_Search::StartSearch()
 {
-	if (selectedName == ("BFS"))
-		search->StartBFS();
-	else if (selectedName == ("DFS"))
-		search->StartDFS(nullptr);
-	else if (selectedName == ("Dijkstra")) {
-		search->StartDijkstra();
-		search->ActivateDijkstra();
-	}
-	else if (selectedName == ("A*")) {
-		search->StartAstar(nullptr);
-		search->ActivateAStar();
+	if (!isStarted) {
+		isStarted = true;
+		if (!isReset) {
+			search->ResetMap();
+		}
+		isReset = false;
+		if (selectedName == ("BFS"))
+			search->StartBFS();
+		else if (selectedName == ("DFS"))
+			search->StartDFS(nullptr);
+		else if (selectedName == ("Dijkstra")) {
+			search->StartDijkstra();
+			search->ActivateDijkstra();
+		}
+		else if (selectedName == ("A*")) {
+			search->StartAstar(nullptr);
+			search->ActivateAStar();
+		}
+	
 	}
 }
 
+// 맵 초기화 함수 호출
 void UW_Search::StartReset()
 {
-	search->ResetMap();
+	if (!isStarted) {
+		search->ResetMap();
+		isReset = true;
+	}
 }
 
 // 선택한 정렬 알고리즘 이름 설정

@@ -47,6 +47,10 @@ private:
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* alertSuccess;
 
+	bool isStarted = false;
+
+	bool isReset= true;
+
 	UFUNCTION()
 	void CallDeleFunc_OnDestinationReached();
 	UFUNCTION()
