@@ -273,8 +273,8 @@ FAsyncCoroutine ASearch::Research()
 		}
 		else {
 			arrNeighborCell.Empty();
-			// Delay(0.2)
-			co_await UE5Coro::Latent::Seconds(0.2);
+			// Delay(0.1)
+			co_await UE5Coro::Latent::Seconds(0.1);
 			Research();
 		}
 	}
@@ -344,8 +344,8 @@ FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 		// Next Cell이 설정돼었는지 확인 후 없으면 arrCurrentCell 배열에서 Next Cell 설정
 		else {
 			if (nextCell != nullptr) {
-				// Delay(0.2)
-				co_await UE5Coro::Latent::Seconds(0.2);
+				// Delay(0.1)
+				co_await UE5Coro::Latent::Seconds(0.1);
 				nextCell->SetMaterial(lightblueMat);
 				StartAstar(nextCell);
 			}
