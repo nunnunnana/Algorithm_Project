@@ -7,7 +7,11 @@
 ### 시연 영상
 >Stack
 
+![Stack_Visualization](https://github.com/nunnunnana/Algorithm_Project/assets/99165741/4ee3d420-7d2c-47dc-85ed-bb43d352efe1)
+
 >Queue
+
+![Queue_Visualization](https://github.com/nunnunnana/Algorithm_Project/assets/99165741/e57d612a-057b-4d88-b5fa-642b894ff5f4)
 
 ## 주요기능
 
