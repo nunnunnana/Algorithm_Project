@@ -10,7 +10,6 @@
 #include "Components/TimeLineComponent.h"
 #include "StackQueue.generated.h"
 
-// Pawn C++ 기능 추가되면 사용
 DECLARE_DELEGATE(FDele_OnFulled);
 DECLARE_DELEGATE(FDele_OnEmptied);
 

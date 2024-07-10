@@ -276,13 +276,6 @@ void AStackQueue::SpawnQueueActor(AActor* targetActor, int width)
 	EnqueueTimeline.PlayFromStart();
 }
 
-
-// Enqueue 타임라인 업데이트 함수
-void AStackQueue::EnqueueUpdate(float Alpha)
-{
-	currentTarget->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
-}
-
 /* 큐 액터 제거 */
 void AStackQueue::RemoveQueueActor()
 {
@@ -290,6 +283,12 @@ void AStackQueue::RemoveQueueActor()
 	targetYLocation = -500.0f;
 	// Timeline을 실행
 	DequeueTimeline.PlayFromStart();
+}
+
+// Enqueue 타임라인 업데이트 함수
+void AStackQueue::EnqueueUpdate(float Alpha)
+{
+	currentTarget->SetActorLocation(FVector(0.0f, FMath::Lerp(currentYLocation, targetYLocation, Alpha), 0.0f));
 }
 
 // Dequeue 타임라인 업데이트 함수
