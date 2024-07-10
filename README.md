@@ -1,4 +1,4 @@
-# Algorithm_Project
+# Algorithm_Visualization_Project
 
 # 프로젝트 소개
 ### 언리얼 엔진을 활용한 알고리즘 시각화 프로젝트
@@ -29,11 +29,14 @@
 
 ### 액터 생성
 - 메시, Material 에셋을 찾아 설정
-https://github.com/nunnunnana/Algorithm_Project/blob/f509ef499e237820fa9bfd7293c67805698d9c2c/Source/Algorithm_Project/StackQueue.cpp#L11-L29
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/d3e971d6972a6ce5b3ad0173649aaa640cf49a1b/Source/Algorithm_Project/StackQueue.cpp#L11-L29
 
 - 액터 생성 및 제거 함수
 - 타임라인을 이용해 액터를 움직일 예정으로 SetMobility를 Movable로 설정
-https://github.com/nunnunnana/Algorithm_Project/blob/f509ef499e237820fa9bfd7293c67805698d9c2c/Source/Algorithm_Project/StackQueue.cpp#L346-L366
+
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/f509ef499e237820fa9bfd7293c67805698d9c2c/Source/Algorithm_Project/StackQueue.cpp#L346-L366
 
 ### 스택 액터 Push, Pop
+
+
 
