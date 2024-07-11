@@ -90,3 +90,10 @@ https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/64354e17d93ad
 
 - 액터가 생성되면 index 값 만큼 Z축으로 액터 생성
 https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/64354e17d93ad4be1655343ae680173adbd638c3/Source/Algorithm_Project/SortActorMesh.cpp#L51-L60
+
+### 블록 Shuffle
+
+![Sort_Shuffle](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/bdd8a72c-09f9-414b-9b44-d9e9ebd95638)
+
+- arrTarget 배열을 랜덤하게 섞고 배열의 인덱스 값에 따라서 Location 설정해주는 함수 호출
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/58009575aba7c1c1d3c92725fe703197a3b60195/Source/Algorithm_Project/SortActor.cpp#L67-L93
