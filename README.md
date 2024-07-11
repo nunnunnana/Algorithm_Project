@@ -63,21 +63,23 @@ https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/64354e17d93ad
 ### 시연 영상
 >Selection sort
 
-
+![Sort_Selection](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/49fb040d-68f4-43b4-b134-9577e3eb3cdc)
 
 >Injection sort
 
-
+![Sort_Injection](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/2aed695b-6434-457f-90a0-8286ed6d0e9c)
 
 >Bubble sort
 
-
+![Sort_Bubble](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/ec34b223-cba4-4095-8f48-01a726e69cb3)
 
 >Merge sort
 
-
+![Sort_Merge](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/9d94ba18-4ef7-4e29-8f84-62aec3403ad4)
 
 >Quick sort
+
+![Sort_Quick](https://github.com/nunnunnana/Algorithm_Visualization_Project/assets/99165741/652a1e3d-eb50-4e6b-b771-042d8b64e4f8)
 
 ## 주요기능
 
