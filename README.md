@@ -97,3 +97,56 @@ https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/64354e17d93ad
 
 - arrTarget 배열을 랜덤하게 섞고 배열의 인덱스 값에 따라서 Location 설정해주는 함수 호출
 https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/58009575aba7c1c1d3c92725fe703197a3b60195/Source/Algorithm_Project/SortActor.cpp#L67-L93
+
+### 선택 정렬
+- 가장 낮은 Index를 찾을 때 현재의 Index는 파란색, 가장 낮은 Index는 빨간색으로 설정
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/SortActor.cpp#L120-L164
+
+### 삽입 정렬
+- 원소 비교 후 색상 설정할 때 각각 하얀색, 파란색으로 설정
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/SortActor.cpp#L177-L208
+
+### 버블 정렬
+- Index를 비교할 때 Swap이 일어나면 빨간색, Swap을 하지 않으면 파란색으로 표시
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/SortActor.cpp#L222-L250
+
+### 합병 정렬
+- 합병 정렬은 다른 정렬과 다르게 coroutine 사용
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/SortActor.cpp#L272-L318
+
+### 퀵 정렬
+- 합병 정렬과 마찬가지로 coroutine 사용
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/SortActor.cpp#L330-L382
+
+***
+
+## 3. 탐색
+
+### 시연 영상
+>BFS
+
+![Search_BFS](https://github.com/user-attachments/assets/c66ea4f1-1852-41ee-8e2f-aae62c53b7a7)
+
+>DFS
+
+![Search_DFS](https://github.com/user-attachments/assets/33a6959c-1d6e-4154-8ea7-9ed229f8df58)
+
+
+>Dijkstra
+
+![Search_Dijkstra](https://github.com/user-attachments/assets/7c823f16-4cd0-43af-b99f-1ac39fc3bf82)
+
+
+>A*
+
+![Search_AStar](https://github.com/user-attachments/assets/57decd59-eccb-48f8-837c-6cd8c96db98f)
+
+## 주요기능
+
+### 미로 생성 및 Reset
+
+![Search_Reset](https://github.com/user-attachments/assets/35d1111a-f8b8-471b-bd6e-c1bd03f81e7f)
+
+- height와 width 값을 받아 각각 높이와 너비 설정, 액터간 간격은 100
+- 벽은 랜덤하게 distribution 값에 따라 생성
+https://github.com/nunnunnana/Algorithm_Visualization_Project/blob/6a9059541bdf2af3b704d8438ad7d9a481015548/Source/Algorithm_Project/Search.cpp#L33-L92
