@@ -93,18 +93,18 @@ void ASearch::ResetMap()
 
 void ASearch::StartBFS()
 {
-	// ±âÁØÀÌ µÇ´Â point ¼³Á¤
+	// ê¸°ì¤€ì´ ë˜ëŠ” point ì„¤ì •
 	currentCell = startPoint;
 	arrNeighborCell.Empty();
 	arrCurrentCell.Add(currentCell);
-	// 0.1ÃÊ ¸¶´Ù SetSelectionSortColor ÇÔ¼ö ½ÇÇà
+	// 0.1ì´ˆ ë§ˆë‹¤ BFS í•¨ìˆ˜ ì‹¤í–‰
 	GetWorld()->GetTimerManager().SetTimer(bfsTimer, this, &ASearch::BFS, 0.1f, true, 0.0f);
 }
 
 void ASearch::BFS()
 {
 	if (arrCurrentCell.IsEmpty() != true) {
-		// arrCurrentCellÀÇ Ã¹ ¹øÂ° ÀÎµ¦½º¸¦ ±âÁØÀ¸·Î ¼³Á¤ÇÏ°í Ã¹ ¹øÂ° ÀÎµ¦½º Á¦°Å
+		// arrCurrentCellì˜ ì²« ë²ˆì§¸ ì¸ë±ìŠ¤ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì„¤ì •í•˜ê³  ì²« ë²ˆì§¸ ì¸ë±ìŠ¤ ì œê±°
 		currentCell = arrCurrentCell[0];
 		arrCurrentCell.RemoveAt(0);
 
@@ -115,7 +115,7 @@ void ASearch::BFS()
 			}
 		}
 
-		// CellArray¿¡ End point ÀÖ´ÂÁö È®ÀÎ
+		// CellArrayì— End point ìžˆëŠ”ì§€ í™•ì¸
 		for (ASearch_Points* arr : arrNeighborCell)
 		{
 			if (arr->isEndpoint == true) {
@@ -128,7 +128,7 @@ void ASearch::BFS()
 			}
 		}
 
-		// EntPoint¿¡ µµ´ÞÇßÀ¸¸é ¹æ¹®Çß´ø CellÀÇ »ö»ó º¯°æ
+		// EntPointì— ë„ë‹¬í–ˆìœ¼ë©´ ë°©ë¬¸í–ˆë˜ Cellì˜ ìƒ‰ìƒ ë³€ê²½
 		if (isfindEndPoint == true) {
 			for (ASearch_Points* arr : arrTotalCell)
 			{
@@ -141,13 +141,13 @@ void ASearch::BFS()
 			OnDestinationReached.Execute();
 		}
 		else {
-			// ±ÙÃ³ Cell Å½»öÇØ¼­ ´ãÀº ¹è¿­ ÃÊ±âÈ­
+			// ê·¼ì²˜ Cell íƒìƒ‰í•´ì„œ ë‹´ì€ ë°°ì—´ ì´ˆê¸°í™”
 			arrNeighborCell.Empty();
 		}
 		
 	}
 	else {
-		// EndPoint¸¦ ¸øÃ£¾ÒÀ» ¶§
+		// EndPointë¥¼ ëª»ì°¾ì•˜ì„ ë•Œ
 		GetWorld()->GetTimerManager().ClearTimer(bfsTimer);
 		arrTotalCell.Empty();
 		OnDestinationUnreached.Execute();
@@ -156,7 +156,7 @@ void ASearch::BFS()
 
 FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 {
-	// ±âÁØÀÌ µÇ´Â point ¼³Á¤
+	// ê¸°ì¤€ì´ ë˜ëŠ” point ì„¤ì •
 	if (point != nullptr) {
 		currentCell = point;
 	}
@@ -173,7 +173,7 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		}
 	}
 
-	// CellArray¿¡ End point ÀÖ´ÂÁö È®ÀÎ
+	// CellArrayì— End point ìžˆëŠ”ì§€ í™•ì¸
 	for (ASearch_Points* arr : arrNeighborCell)
 	{
 		if (arr->isEndpoint == true) {
@@ -184,7 +184,7 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		}
 	}
 
-	// EntPoint¿¡ µµ´ÞÇßÀ¸¸é ¹æ¹®Çß´ø CellÀÇ »ö»ó º¯°æ
+	// EntPointì— ë„ë‹¬í–ˆìœ¼ë©´ ë°©ë¬¸í–ˆë˜ Cellì˜ ìƒ‰ìƒ ë³€ê²½
 	if (isfindEndPoint == true) {
 		for (ASearch_Points* arr : arrCurrentCell)
 		{
@@ -195,8 +195,8 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 		OnDestinationReached.Execute();
 	}
 
-	// »óÇÏÁÂ¿ì Áß CellÀÌ ÀÖÀ¸¸é ·£´ýÀ¸·Î ÇÏ³ª Á¤ÇØ¼­ Next Cell ¼³Á¤ ÈÄ »ö»ó º¯°æ 
-	// ¸¸¾à Cell ÀÌ ¾øÀ¸¸é ArrCurrentCell ¸¶Áö¸· ÀÎµ¦½º - 1 À» Next Cell ·Î ¼³Á¤ ÈÄ ÇÔ¼ö È£Ãâ
+	// ìƒí•˜ì¢Œìš° ì¤‘ Cellì´ ìžˆìœ¼ë©´ ëžœë¤ìœ¼ë¡œ í•˜ë‚˜ ì •í•´ì„œ Next Cell ì„¤ì • í›„ ìƒ‰ìƒ ë³€ê²½ 
+	// ë§Œì•½ Cell ì´ ì—†ìœ¼ë©´ ArrCurrentCell ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ - 1 ì„ Next Cell ë¡œ ì„¤ì • í›„ í•¨ìˆ˜ í˜¸ì¶œ
 	else {
 		if (arrNeighborCell.IsEmpty() == true) {
 			if (arrCurrentCell.IsEmpty() == true) {
@@ -226,7 +226,7 @@ FAsyncCoroutine ASearch::StartDFS(ASearch_Points* point)
 
 void ASearch::StartDijkstra()
 {
-	// ±âÁØÀÌ µÇ´Â point ¼³Á¤
+	// ê¸°ì¤€ì´ ë˜ëŠ” point ì„¤ì •
 	currentCell = startPoint;
 	arrNeighborCell.Empty();
 	arrCurrentCell.Add(currentCell);
@@ -245,13 +245,13 @@ FAsyncCoroutine ASearch::Research()
 			}
 		}
 	}
-	// EndPoint¸¦ ¸øÃ£¾ÒÀ» ¶§
+	// EndPointë¥¼ ëª»ì°¾ì•˜ì„ ë•Œ
 	if (arrNeighborCell.IsEmpty()) {
 		arrCurrentCell.Empty();
 		arrNeighborCell.Empty();
 		OnDestinationUnreached.Execute();
 	}
-	// CellArray¿¡ End point ÀÖ´ÂÁö È®ÀÎ
+	// CellArrayì— End point ìžˆëŠ”ì§€ í™•ì¸
 	else {
 		dijkstraCost++;
 		for (ASearch_Points* arr : arrNeighborCell) {
@@ -266,7 +266,7 @@ FAsyncCoroutine ASearch::Research()
 				arrCurrentCell.Add(arr);
 			}
 		}
-		// EndPoint Ã£¾Ò´ÂÁö Á¶°Ç È®ÀÎ
+		// EndPoint ì°¾ì•˜ëŠ”ì§€ ì¡°ê±´ í™•ì¸
 		if (isfindEndPoint == true) {
 			currentCell = endPoint;
 			ReturnToStartPoint();
@@ -282,7 +282,7 @@ FAsyncCoroutine ASearch::Research()
 
 FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 {
-	// ±âÁØÀÌ µÇ´Â point ¼³Á¤
+	// ê¸°ì¤€ì´ ë˜ëŠ” point ì„¤ì •
 	if (point != nullptr) {
 		currentCell = point;
 	}
@@ -302,7 +302,7 @@ FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 		}
 	}
 
-	// CellArray¿¡ End point ÀÖ´ÂÁö È®ÀÎ
+	// CellArrayì— End point ìžˆëŠ”ì§€ í™•ì¸
 	for (ASearch_Points* arr : arrNeighborCell)
 	{
 		if (arr->isEndpoint == true) {
@@ -316,24 +316,24 @@ FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 		}
 	}
 
-	// ÇöÀç Cell°ú °Å¸® ºñ±³ÇØ¼­ Next Cell ¼³Á¤
+	// í˜„ìž¬ Cellê³¼ ê±°ë¦¬ ë¹„êµí•´ì„œ Next Cell ì„¤ì •
 	for (ASearch_Points* arr : arrCurrentCell)
 	{
 		CompareNextCell(arr, currentCell);
 	}
 
-	// arrCurrentCell ¹è¿­¿¡¼­ ±âÁØ ³ëµå Á¦°Å ÈÄ ¹è¿­ÀÌ ºñ¾îÀÖ´ÂÁö È®ÀÎ
+	// arrCurrentCell ë°°ì—´ì—ì„œ ê¸°ì¤€ ë…¸ë“œ ì œê±° í›„ ë°°ì—´ì´ ë¹„ì–´ìžˆëŠ”ì§€ í™•ì¸
 	arrCloseCell.Add(currentCell);
 	arrCurrentCell.Remove(currentCell);
 
-	// arrCurrentCell¿¡¼­ EndPoint¸¦ ¸øÃ£¾ÒÀ» ¶§
+	// arrCurrentCellì—ì„œ EndPointë¥¼ ëª»ì°¾ì•˜ì„ ë•Œ
 	if (arrCurrentCell.IsEmpty()) {
 		arrNeighborCell.Empty();
 		nextCell = nullptr;
 		OnDestinationUnreached.Execute();
 	}
 	else {
-		// EndPoint¸¦ Ã£¾ÒÀ» ¶§
+		// EndPointë¥¼ ì°¾ì•˜ì„ ë•Œ
 		if (isfindEndPoint) {
 			arrNeighborCell.Empty();
 			currentCell = endPoint;
@@ -341,7 +341,7 @@ FAsyncCoroutine ASearch::StartAstar(ASearch_Points* point)
 			BackTracking();
 		}
 
-		// Next CellÀÌ ¼³Á¤µÅ¾ú´ÂÁö È®ÀÎ ÈÄ ¾øÀ¸¸é arrCurrentCell ¹è¿­¿¡¼­ Next Cell ¼³Á¤
+		// Next Cellì´ ì„¤ì •ë¼ì—ˆëŠ”ì§€ í™•ì¸ í›„ ì—†ìœ¼ë©´ arrCurrentCell ë°°ì—´ì—ì„œ Next Cell ì„¤ì •
 		else {
 			if (nextCell != nullptr) {
 				// Delay(0.1)
@@ -384,7 +384,7 @@ void ASearch::ActivateAStar()
 	}
 }
 
-// ÇöÀç ¼¿ÀÇ ÀÌ¿ô ¼¿µéÀ» Ã£´Â ÇÔ¼ö
+// í˜„ìž¬ ì…€ì˜ ì´ì›ƒ ì…€ë“¤ì„ ì°¾ëŠ” í•¨ìˆ˜
 void ASearch::FindNeighborCell(ASearch_Points* point)
 {
 	float pointX = point->GetActorLocation().X;
@@ -393,30 +393,30 @@ void ASearch::FindNeighborCell(ASearch_Points* point)
 	float currentX = currentCell->GetActorLocation().X;
 	float currentY = currentCell->GetActorLocation().Y;
 
-	// ¿ÞÂÊ È®ÀÎ
+	// ì™¼ìª½ í™•ì¸
 	if (pointX == (currentX - 100.0) && pointY == currentY) {
 		arrNeighborCell.Add(point);
 	}
-	// ¿À¸¥ÂÊ È®ÀÎ
+	// ì˜¤ë¥¸ìª½ í™•ì¸
 	else if (pointX == (currentX + 100.0) && pointY == currentY) {
 		arrNeighborCell.Add(point);
 	}
-	// À§ÂÊ È®ÀÎ
+	// ìœ„ìª½ í™•ì¸
 	else if (pointX == currentX && pointY == (currentY + 100.0)) {
 		arrNeighborCell.Add(point);
 	}
-	// ¾Æ·¡ÂÊ È®ÀÎ
+	// ì•„ëž˜ìª½ í™•ì¸
 	else if (pointX == currentX && pointY == (currentY - 100.0)) {
 		arrNeighborCell.Add(point);
 	}
 }
 
-// ½ÃÀÛÁöÁ¡À¸·Î µ¹¾Æ°¡±â
+// ì‹œìž‘ì§€ì ìœ¼ë¡œ ëŒì•„ê°€ê¸°
 void ASearch::ReturnToStartPoint()
 {
 	for (ASearch_Points* arr : arrPoints)
 	{
-		// Visited Á¶°Ç È®ÀÎ ¾ÈÇÏ°í ±ÙÃ³ Cell Å½»ö
+		// Visited ì¡°ê±´ í™•ì¸ ì•ˆí•˜ê³  ê·¼ì²˜ Cell íƒìƒ‰
 		if (arr->isWall != true) {
 			FindNeighborCell(arr);
 		}
@@ -427,13 +427,13 @@ void ASearch::ReturnToStartPoint()
 			currentCell = arr;
 		}
 	}
-	// ÃÊ±â ÁöÁ¡À¸·Î µ¹¾Æ¿ÔÀ¸¸é Å½»ö ¼º°ø Ç¥½Ã
+	// ì´ˆê¸° ì§€ì ìœ¼ë¡œ ëŒì•„ì™”ìœ¼ë©´ íƒìƒ‰ ì„±ê³µ í‘œì‹œ
 	if (dijkstraCost == 1) {
 		arrCurrentCell.Empty();
 		arrNeighborCell.Empty();
 		OnDestinationReached.Execute();
 	}
-	// cost¿¡ -1ÇÏ¸é¼­ »ö»ó º¯°æ ÈÄ ÇÔ¼ö È£Ãâ
+	// costì— -1í•˜ë©´ì„œ ìƒ‰ìƒ ë³€ê²½ í›„ í•¨ìˆ˜ í˜¸ì¶œ
 	else {
 		dijkstraCost--;
 		arrNeighborCell.Empty();
@@ -442,7 +442,7 @@ void ASearch::ReturnToStartPoint()
 	}
 }
 
-// µÎ ÁöÁ¡ »çÀÌÀÇ ¸ÇÇØÆ° °Å¸®¸¦ °è»êÇÏ´Â ÇÔ¼ö
+// ë‘ ì§€ì  ì‚¬ì´ì˜ ë§¨í•´íŠ¼ ê±°ë¦¬ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
 float ASearch::CalcManhattanDistance(ASearch_Points* currentPoint, ASearch_Points* targetPoint)
 {
 	float result = 0.0f;
@@ -457,7 +457,7 @@ float ASearch::CalcManhattanDistance(ASearch_Points* currentPoint, ASearch_Point
 	return abs(result);
 }
 
-// µÎ CellÀÇ °Å¸® ºñ±³ ÈÄ Next Cell ¼³Á¤
+// ë‘ Cellì˜ ê±°ë¦¬ ë¹„êµ í›„ Next Cell ì„¤ì •
 void ASearch::CompareNextCell(ASearch_Points* targetPoint, ASearch_Points* currentPoint)
 {
 	if ((targetPoint->g + targetPoint->h) > (currentPoint->g + currentPoint->h)) {
@@ -470,7 +470,7 @@ void ASearch::CompareNextCell(ASearch_Points* targetPoint, ASearch_Points* curre
 	}
 }
 
-// ¸ñÀûÁö¿¡ µµ´ÞÇßÀ» ¶§ °æ·Î¸¦ ÃßÀûÇÏ´Â ÇÔ¼ö
+// ëª©ì ì§€ì— ë„ë‹¬í–ˆì„ ë•Œ ê²½ë¡œë¥¼ ì¶”ì í•˜ëŠ” í•¨ìˆ˜
 void ASearch::BackTracking()
 {
 	for (ASearch_Points* arr : arrCloseCell)
@@ -478,7 +478,7 @@ void ASearch::BackTracking()
 		FindNeighborCell(arr);
 	}
 
-	// Current Cell ¼³Á¤
+	// Current Cell ì„¤ì •
 	for (int index = 0; index != arrNeighborCell.Num(); index++)
 	{
 		if (index == 0) {
@@ -494,7 +494,7 @@ void ASearch::BackTracking()
 		}
 	}
 
-	// ½ÃÀÛÁ¡±îÁö µµÂøÇÏ¸é Á¾·á
+	// ì‹œìž‘ì ê¹Œì§€ ë„ì°©í•˜ë©´ ì¢…ë£Œ
 	arrNeighborCell.Empty();
 	currentCell->SetMaterial(greenMat);
 	if (currentCell->g == 100) {
