@@ -6,7 +6,7 @@
 ![Algorithm_Intro](https://github.com/nunnunnana/Algorithm_Project/assets/99165741/99f065d7-c59d-4659-a3f8-1818a9389791)
 
 
-### [시연 영상]
+### [시연 영상](https://youtu.be/0EBkD9h4xiw)
 
 # 조작법
 마우스 좌클릭으로 버튼 선택
