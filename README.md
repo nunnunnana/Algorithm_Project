@@ -1,6 +1,6 @@
 # Algorithm_Visualization_Project
 
-# 프로젝트 소개
+## 프로젝트 소개
 ### 언리얼 엔진을 활용한 알고리즘 시각화 프로젝트
 
 ![Algorithm_Intro](https://github.com/nunnunnana/Algorithm_Project/assets/99165741/99f065d7-c59d-4659-a3f8-1818a9389791)
@@ -8,7 +8,7 @@
 
 ### [시연 영상](https://youtu.be/0EBkD9h4xiw)
 
-# 조작법
+## 조작법
 마우스 좌클릭으로 버튼 선택
 화면 우측 하단에 버튼을 클릭해 실행할 알고리즘 선택
 
